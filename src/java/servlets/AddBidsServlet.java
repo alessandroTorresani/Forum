@@ -1,0 +1,185 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package servlets;
+
+import db.DBManager;
+import db.User;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ *
+ * @author harwin
+ */
+public class AddBidsServlet extends HttpServlet {
+
+    private DBManager manager;
+
+    public void init() throws ServletException {// inizializza il DBManager dagli attributi di Application
+        this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
+    }
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        response.setContentType("text/html;charset=UTF-8");
+        int group_id = Integer.parseInt(request.getParameter("group_id"));
+        List<Integer> first_filter = new ArrayList(); // primo filtro di id, ottengo gli id degli utenti che non fanno gia parte del gruppo
+        List<Integer> second_filter = new ArrayList(); // secondo filtro per ottenere gli utenti che non hanno gia un invito attivo per tale gruppo
+        List<String> users_ids = new ArrayList(); // utenti definitivi che dovranno essere invitabili dal form
+
+        try {
+            first_filter = manager.getUsersNotIntoGroup(group_id); // ottengo gli id degli utenti che non fanno gia parte di questo gruppo (bug un utente che non ha già un gruppo non compare)
+
+        } catch (SQLException ex) {
+            Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, ex.toString(), ex);
+            throw new ServletException(ex);
+        }
+
+        for (int x = 0; x < first_filter.size(); x++) {
+            System.out.println("first= " + first_filter.get(x));
+        }
+        try {
+            second_filter = manager.getUserNotInvited(group_id); // ottengo gli id degli utenti che non fanno gia parte di questo gruppo
+
+        } catch (SQLException ex) {
+            Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, ex.toString(), ex);
+            throw new ServletException(ex);
+        }
+
+         for (int x = 0; x < second_filter.size(); x++) {
+         System.out.println("second= " + second_filter.get(x));
+         }
+         
+        if ((second_filter.size() == 0) && (first_filter.size() > 0)) { // se il secondo filtro non ha dato risultati e il primo non è vuoto allora il primo sarà il definiivo
+            for (int x = 0; x < first_filter.size(); x++) {
+                users_ids.add("" + first_filter.get(x));
+
+            }
+
+        } else if ((second_filter.size() > 0) && (first_filter.size() > 0)) { // devo togliere gli utenti che hanno già un invito in attesa
+            for (int x = 0; x < second_filter.size(); x++) {
+                if (first_filter.contains(second_filter.get(x))) {
+                    first_filter.remove(second_filter.get(x));
+                }
+            }
+            for (int x = 0; x < first_filter.size(); x++) {
+                //  System.out.println("First after: " + first_filter.get(x));
+                users_ids.add("" + first_filter.get(x));
+            }
+        }
+
+        for (int x = 0; x < users_ids.size(); x++) {
+         System.out.println("user= " + users_ids.get(x));
+         }
+        // adesso che ho gli id delle persone che posso invitare devo recuperare tali utenti per poterli stampare
+        List<User> users = null;
+        try {
+            users = manager.getUsersById(users_ids);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, ex.toString(), ex);
+            throw new ServletException(ex);
+        }
+
+        // devo mandare gli inviti alla persone che non fanno già parte del gruppo o che non hanno già un'invito relativo al gruppo
+        PrintWriter out = response.getWriter();
+        try {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Send bids</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Who do you want to invite ? </h1>");
+            
+            if (users.size() > 0) {
+
+                out.println("<FORM action='AddBidsC' method ='POST'>");
+                User u;
+                for (int x = 0; x < users.size(); x++) {
+                    u = users.get(x);
+                    out.println("<input type='checkbox' name='user' value= " + "'" + u.getUserId() + "'>" + u.getUsername() + "<br>");
+                }
+                
+            }
+               out.println("<input type='hidden' value = '" + group_id + "' name='group_id'>");
+            out.println("<INPUT type='submit' value='Invite'>");
+            out.println("</FORM>");
+
+            out.println("</body>");
+            out.println("</html>");
+        } finally {
+            out.close();
+        }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(AddBidsServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(AddBidsServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}
