@@ -68,7 +68,8 @@ public class CreateGroupCServlet extends HttpServlet {
         int group_id = 0;
         if (created_group != null) { // se la creazione è andata a buon fine mi salvo l'id del gruppo appena creato
             group_id = created_group.getGroupId();
-            File dir = new File("C:\\Users\\Alessandro\\Documents\\NetBeansProjects\\Forum\\Web\\UsersFiles\\"+group_id); // creo la cartella dove saranno messi i file in upload
+            String folderPath = request.getServletContext().getRealPath("/");
+            File dir = new File(folderPath + File.separator + "usersFiles"+ File.separator + group_id); // creo la cartella dove saranno messi i file in upload
             dir.mkdir();
         }
 

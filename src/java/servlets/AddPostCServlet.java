@@ -56,7 +56,7 @@ public class AddPostCServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         int group_id = Integer.parseInt(request.getParameter("id")); // prendo l'id
-        String uploadDir = request.getServletContext().getRealPath("/") + "\\UsersFiles\\" + group_id;  // cartella dove carico i file! + id del gruppo! DEVO CREARE LA CARTELLA DEL GRUPPO AL MOMENTO DELLA CREAZIONE
+        String uploadDir = request.getServletContext().getRealPath("/") + "\\usersFiles\\" + group_id;  // cartella dove carico i file! + id del gruppo! DEVO CREARE LA CARTELLA DEL GRUPPO AL MOMENTO DELLA CREAZIONE
         MultipartRequest multi = new MultipartRequest(request, uploadDir, 10 * 1024 * 1024, "ISO-8859-1", new DefaultFileRenamePolicy()); // devo usare un multipartrequest per passare i parametri (10 Mb limite file)
 
         HttpSession session = request.getSession();

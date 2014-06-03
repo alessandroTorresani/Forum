@@ -37,6 +37,7 @@
         <url-pattern>/SeeGroup</url-pattern>
         <url-pattern>/AddPost</url-pattern>
         <url-pattern>/AddPostC</url-pattern>
+        <url-pattern>/usersFiles/*</url-pattern>
     </filter-mapping>
     <filter>
         <filter-name>adminFilter</filter-name>

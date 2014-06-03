@@ -97,8 +97,9 @@ public class SeeGroupServlet extends HttpServlet {
                     out.println("<td>" + posts.get(x).getContent() + "</td>");
 
                     if (pf.getFileName() != null) { // se il post ha un link relativo ad un file lo visualizzo
-                        fileLink = request.getContextPath() + "/UsersFiles/" + group_id + "/" + pf.getFileName();
-                        out.println("<td> <a href = '" + fileLink + "' target='_blank'>" + pf.getFileName() + "</a> </td>");
+                        fileLink = request.getContextPath() + "/usersFiles/" + group_id + "/" + pf.getFileName()+"?id="+group_id;
+                        System.out.println("link:" + fileLink);
+                        out.println("<td> <a href = '"+fileLink+" ' target='_blank'>" + pf.getFileName() + "</a> </td>");
                     } else {
                         out.println("<td></td>");
                     }

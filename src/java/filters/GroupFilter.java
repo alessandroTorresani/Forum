@@ -47,6 +47,8 @@ public class GroupFilter implements Filter {
         int id_group = -1; // se non riesce il parsing rimane questo valore che viene considerato errore
         boolean parsed = true; // controllo se il valore passato come id è convertibile in un intero
         List<Integer> users = null; // lista che conterrà tutti gli id ammessi al gruppo
+        
+        System.out.println("filtro group usato");
 
         try {
             id_group = Integer.parseInt(request.getParameter("id")); // ottengo l'id passato per l'url (devo controllare che venga passato un int e non qualcos'altro)
