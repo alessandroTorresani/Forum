@@ -323,7 +323,7 @@ public class DBManager implements Serializable {
         }
     }
 
-    public void acceptBids(String[] bids_ids, int user_id) throws SQLException { // MANCA IL CONTROLLO DEL FATTO CHE SE MODIFICO
+    public void acceptBids1(String[] bids_ids, int user_id) throws SQLException { // MANCA IL CONTROLLO DEL FATTO CHE SE MODIFICO
 
         int[] groups_ids = new int[bids_ids.length]; // mi salvo gli id dei gruppi a cui devo aggiungere gli utenti che hanno accettato l'invito
         PreparedStatement stm = con.prepareStatement("SELECT id_gruppo FROM invito WHERE id_invito = ? AND id_utente = ?"); // 
@@ -375,7 +375,48 @@ public class DBManager implements Serializable {
         }
     }
     
-    public void refuseBids(String[] bids_ids) throws SQLException{
+    public void AcceptBids(List<String> bids, int userId) throws SQLException {
+        PreparedStatement stm = con.prepareStatement("INSERT INTO gruppo_utente (id_utente, id_gruppo, amministratore) VALUES (?,?,?)");
+        int groupId = 0;
+        try {
+            stm.setInt(1, userId);
+            stm.setBoolean(3, false);
+            for (int x = 0; x < bids.size(); x++) {
+                PreparedStatement stm1 = con.prepareCall("SELECT id_gruppo FROM invito WHERE id_invito = ?");
+                try {
+                    stm1.setInt(1, Integer.parseInt(bids.get(x)));
+                    ResultSet rs = stm1.executeQuery();
+                    try {
+                        while (rs.next()) {
+                            groupId = rs.getInt("id_gruppo");
+                        }
+                    } finally {
+                        rs.close();
+                    }
+                } finally {
+                    stm1.close();
+                }
+                stm.setInt(2, groupId);
+                stm.executeUpdate();
+            }
+        } finally {
+            stm.close();
+        }
+    }
+    
+    public void deleteBids(List<String> bids) throws SQLException {
+        PreparedStatement stm = con.prepareStatement("DELETE FROM invito WHERE id_invito=?");
+        try {
+            for (int x = 0; x < bids.size(); x++) {
+                stm.setInt(1, Integer.parseInt(bids.get(x)));
+                stm.executeUpdate();
+            }
+        } finally {
+            stm.close();
+        }
+    }
+    
+    public void refuseBids1(String[] bids_ids) throws SQLException{
          PreparedStatement stm = con.prepareStatement("DELETE FROM invito WHERE id_invito = ?"); // elimino gli inviti con ids bids_ids
             try {
                 for (int x = 0; x < bids_ids.length; x++) {
@@ -385,6 +426,49 @@ public class DBManager implements Serializable {
             } finally {
                 stm.close();
             }
+    }
+    
+    public boolean checkBids1(List<Integer> bids_ids, int user_id) throws SQLException{
+        boolean res = true;
+        for(int x = 0; x < bids_ids.size(); x++){
+            PreparedStatement stm = con.prepareStatement("SELECT id_utente FROM invito WHERE id_invito= ?");
+            try {
+                stm.setInt(1, bids_ids.get(x));
+                ResultSet rs = stm.executeQuery();
+                try {
+                    while(rs.next()){
+                        if(rs.getInt("id_utente") != user_id){
+                            res = false;
+                        }
+                    }
+                } finally {
+                    rs.close();
+                }
+            } finally {
+                stm.close();
+            }
+        }
+        return res;
+    }
+    
+    public boolean checkBids(int userId, int bidId) throws SQLException {
+        PreparedStatement stm = con.prepareStatement("SELECT id_utente FROM invito WHERE id_invito = ? and id_utente = ?");
+        int numBids = 0;
+        try {
+            stm.setInt(1, bidId);
+            stm.setInt(2, userId);
+            ResultSet rs = stm.executeQuery();
+            try {
+                while (rs.next()) {
+                    numBids++;
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return numBids == 0;
     }
 
     public boolean changeGroupName(String name, int group_id) throws SQLException {

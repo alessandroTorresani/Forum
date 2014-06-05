@@ -67,10 +67,10 @@ public class AddBidsServlet extends HttpServlet {
             throw new ServletException(ex);
         }
 
-         for (int x = 0; x < second_filter.size(); x++) {
-         System.out.println("second= " + second_filter.get(x));
-         }
-         
+        for (int x = 0; x < second_filter.size(); x++) {
+            System.out.println("second= " + second_filter.get(x));
+        }
+
         if ((second_filter.size() == 0) && (first_filter.size() > 0)) { // se il secondo filtro non ha dato risultati e il primo non è vuoto allora il primo sarà il definiivo
             for (int x = 0; x < first_filter.size(); x++) {
                 users_ids.add("" + first_filter.get(x));
@@ -90,8 +90,8 @@ public class AddBidsServlet extends HttpServlet {
         }
 
         for (int x = 0; x < users_ids.size(); x++) {
-         System.out.println("user= " + users_ids.get(x));
-         }
+            System.out.println("user= " + users_ids.get(x));
+        }
         // adesso che ho gli id delle persone che posso invitare devo recuperare tali utenti per poterli stampare
         List<User> users = null;
         try {
@@ -112,21 +112,27 @@ public class AddBidsServlet extends HttpServlet {
             out.println("<title>Send bids</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Who do you want to invite ? </h1>");
-            
-            if (users.size() > 0) {
 
+            if (users.size() > 0) {
+                out.println("<h1>Who do you want to invite ? </h1>");
+                 
                 out.println("<FORM action='AddBidsC' method ='POST'>");
                 User u;
                 for (int x = 0; x < users.size(); x++) {
                     u = users.get(x);
                     out.println("<input type='checkbox' name='user' value= " + "'" + u.getUserId() + "'>" + u.getUsername() + "<br>");
                 }
-                
+                out.println("<br>");
+                out.println("<input type='hidden' value = '" + group_id + "' name='group_id'>");
+                out.println("<INPUT type='submit' value='Invite'>");
+                out.println("</FORM>");
+            } else {
+                out.println("<h1>No invitable users</h1>");
+                out.println("<br>");
+                out.println("<form action = 'Home' method='get' >"); // tasto torna alla home
+                out.println("<input type='submit' value = 'Back to home'/>");
+                out.println("</form>");
             }
-               out.println("<input type='hidden' value = '" + group_id + "' name='group_id'>");
-            out.println("<INPUT type='submit' value='Invite'>");
-            out.println("</FORM>");
 
             out.println("</body>");
             out.println("</html>");
