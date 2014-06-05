@@ -75,7 +75,7 @@ public class HomeServlet extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, ex.toString(), ex);
             throw new ServletException(ex);
-            
+
         }
         try {
             bids = manager.getBids(user.getUserId()); // recupero gli inviti ricevuti dall'utente
@@ -91,8 +91,34 @@ public class HomeServlet extends HttpServlet {
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Forum Home</title>");
+            out.println("<link href=\"Style/css/bootstrap.css\" rel=\"stylesheet\">");
+            out.println("<meta charset=\"utf-8\">");
+            out.println("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">");
+            out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
             out.println("</head>");
+            
             out.println("<body>");
+            out.println("<script src=\"Style/js/bootstrap.min.js\"></script>");
+            out.println("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js\"></script>");
+            out.println("<nav class=\"navbar navbar-default\" role=\"navigation\">");
+            out.println("<div class=\"container-fluid\">");
+            out.println("<div class=\"navbar-header\">");
+            out.println("<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">");
+            out.println("<span class=\"sr-only\">Toggle navigation</span>");
+            out.println("<span class=\"icon-bar\"></span>");
+            out.println("<span class=\"icon-bar\"></span>");
+            out.println("<span class=\"icon-bar\"></span>");
+            out.println("</button>");
+            out.println("<a class=\"navbar-brand\" href=\"Home\"><b> Forum</b></a>");
+            out.println("</div>");
+            
+            out.println("<div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">");
+            out.println("</div>");
+
+            out.println("</div><!-- /.container-fluid --> </nav>");
+
+            out.println("");
+
             out.println("<h1 style='font-family:Sakkal Majalla;'> Home </h1>");
             out.println("<p> Hi " + user.getUsername() + " </p>");
             out.println("<h1> Groups you belong: </h1>");
@@ -101,7 +127,7 @@ public class HomeServlet extends HttpServlet {
                 out.println("<p> You don't have groups :( </p>");
             } else {
                 out.println("<table border='1'>"); // altimenti creo una tabella per visualizzare i gruppi
-                out.println("<tr>");    
+                out.println("<tr>");
 
                 out.println("<th> Change name </th>");
                 out.println("<th> Group Name </th>");
@@ -123,8 +149,8 @@ public class HomeServlet extends HttpServlet {
                     } else {
                         out.println("<td> </td>");
                     }
-                    
-                    out.println("<td>" +"<a href='SeeGroup?id=" + groups.get(x).getGroupId()+ "'>" + groups.get(x).getGroupName() + "</a> </td>");
+
+                    out.println("<td>" + "<a href='SeeGroup?id=" + groups.get(x).getGroupId() + "'>" + groups.get(x).getGroupName() + "</a> </td>");
                     out.println("<td>" + groups.get(x).getOwnerName() + "</td>");
                     out.println("<td>" + groups.get(x).getCreationDate() + "</td>");
 
@@ -137,7 +163,7 @@ public class HomeServlet extends HttpServlet {
                     } else {
                         out.println("<td> </td>");
                     }
-                      if (groups.get(x).getOwner() == user.getUserId()) { // tasto solo per l'admin del gruppo per ottenere il pdf del report
+                    if (groups.get(x).getOwner() == user.getUserId()) { // tasto solo per l'admin del gruppo per ottenere il pdf del report
                         out.println("<td> <form action ='Report' method ='get'>"
                                 + "<input type='hidden' value = '" + groups.get(x).getGroupId() + "' name='group_id' >"
                                 + "<input type='submit' value='Report' style='width:100%'>"
@@ -150,7 +176,7 @@ public class HomeServlet extends HttpServlet {
                 }
                 out.println("</table");
             }
-            
+
             out.println("<br>");
             out.println("<h1>Invitations: </h1>");
 
@@ -171,13 +197,13 @@ public class HomeServlet extends HttpServlet {
                 for (int x = 0; x < bids.size(); x++) { // stampo gli inviti
                     out.println("<tr>");
 
-                    out.println("<td>" +  bids.get(x).getGroupName() + "</td>");
+                    out.println("<td>" + bids.get(x).getGroupName() + "</td>");
                     out.println("<td>" + bids.get(x).getSenderName() + "</td>");
                     out.println("<td> <input type='checkbox' name='acpBids' value='" + bids.get(x).getBidId() + "' checked='checked'>");// checkbox per accetare gli invii
                     out.println("<td> <input type='checkbox' name='refBids' value='" + bids.get(x).getBidId() + "' >");//checkbok per rifutare gli inviti
 
                     out.println("</tr>");
-                }   
+                }
 
                 out.println("</table>");
                 out.println("<input type='submit' value = 'Submit'/>");
