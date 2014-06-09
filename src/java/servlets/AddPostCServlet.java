@@ -56,55 +56,75 @@ public class AddPostCServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         int group_id = Integer.parseInt(request.getParameter("id")); // prendo l'id
-        String uploadDir = request.getServletContext().getRealPath("/") + File.separator+"usersFiles"+ File.separator +  group_id;  // cartella dove carico i file! + id del gruppo! DEVO CREARE LA CARTELLA DEL GRUPPO AL MOMENTO DELLA CREAZIONE
-        MultipartRequest multi = new MultipartRequest(request, uploadDir, 10 * 1024 * 1024, "ISO-8859-1", new DefaultFileRenamePolicy()); // devo usare un multipartrequest per passare i parametri (10 Mb limite file)
+        String uploadDir = request.getServletContext().getRealPath("/") + File.separator + "usersFiles" + File.separator + group_id;  // cartella dove carico i file! + id del gruppo! DEVO CREARE LA CARTELLA DEL GRUPPO AL MOMENTO DELLA CREAZIONE
 
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
 
-        String post_content = multi.getParameter("post_content"); // ottengo il contenuto del post da multi
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // data per la creazione del gruppo
         Date date = new Date();
         int post_id = -1;
         boolean resPost = false;
         boolean resFile = false;
-        String cleaned = null;
-        String postChecked = null;
+        MultipartRequest multi = null;
+        boolean multiError = false;
+        String post_content = null;
+        File f = null;
 
-        // devo fare il parsing qui per controllare i link!
-        // primo passo controllo che non ci sia codice html nel testo del post (sostituisco i carattere "tipici" html con la loro rappresentazione non interpretabile in html)
-        if ((post_content != null) && (post_content.length() > 0)) {
-            cleaned = MyUtility.cleanHTMLTags(post_content); // pulisco il codice da i caratteri html
-            postChecked = MyUtility.checkMultiLink(cleaned); // controllo se l'utente ha inserito link e li rendo cliccabili
-            
+        try {
+            multi = new MultipartRequest(request, uploadDir, 10 * 1024 * 1024, "ISO-8859-1", new DefaultFileRenamePolicy());
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
         }
-        //System.out.println(postChecked);
 
-        if ((postChecked != null) && (postChecked.length() > 0)) {
-            post_id = manager.createPost(group_id, user.getUserId(), dateFormat.format(date), postChecked);
-            System.out.println("post_id = " + post_id);
-            resPost = true;
-            if (post_id > -1) {
-                Enumeration files = multi.getFileNames();
-                File f;// ottengo il file (solo un file in upload) 
+        if (multi != null) {
+            post_content = multi.getParameter("post_content"); // ottengo il contenuto del post da multi
+            if ((post_content != null) && (post_content.length() > 0)) {
+                post_content = MyUtility.cleanHTMLTags(post_content); // pulisco il codice da i caratteri html
+                post_content = MyUtility.checkMultiLink(post_content);// controllo se l'utente ha inserito link e li rendo cliccabili
+                post_content = post_content.replaceAll("[\n\r]+", "<br>");
+
+                post_id = manager.createPost(group_id, user.getUserId(), dateFormat.format(date), post_content);
+                resPost = true;
+
+                if (post_id > -1) {
+                    Enumeration files = multi.getFileNames();
+                    // ottengo il file (solo un file in upload) 
+                    while (files.hasMoreElements()) {
+                        String name = ((String) files.nextElement());
+
+                        f = multi.getFile(name);
+                        System.out.println("file name: " + f);
+                        if (f != null) { // se il file esiste allora adesso devo aggiornare la tabella POST-FILE
+                            resFile = manager.addFileToPost(f.getName(), post_id, group_id, user.getUserId());
+                        }
+                    }
+                } else {
+                    Enumeration files = multi.getFileNames(); //if something in the post creation went wrong, and was uploaded a file -> delete the file
+                    while (files.hasMoreElements()) {
+                        String name = ((String) files.nextElement());
+                        System.out.println("name:" + name);
+                        f = multi.getFile(name);
+                        if (f != null) {
+                            System.out.println("entrato nell'if del delete");
+                            f.delete();
+                        }
+                    }
+                }
+            } else {
+                Enumeration files = multi.getFileNames(); //if the post content was empty, delete the uploaded file if there is
                 while (files.hasMoreElements()) {
                     String name = ((String) files.nextElement());
-                    /*System.out.println("name: " + name);
-                    System.out.println("getFilesystemName. " + multi.getFilesystemName(name));
-                    System.out.println("getOriginalFileName: " + multi.getOriginalFileName(name));
-                    System.out.println("getContentType " + multi.getContentType(name));*/
-
+                    System.out.println("name:" + name);
                     f = multi.getFile(name);
-                    System.out.println("file name: " + f);
-                    if (f != null) { // se il file esiste allora adesso devo aggiornare la tabella POST-FILE
-                        /*out.println("f.toString()" + f.toString() + "\n");
-                        out.println("f.getName()" + f.getName() + "\n");
-                        out.println("f.exists()" + f.exists() + "\n");
-                        out.println("f.lenght()" + f.length() + "\n");*/
-                        resFile = manager.addFileToPost(f.getName(), post_id, group_id, user.getUserId());
+                    if (f != null) {
+                        System.out.println("entrato nell'if del delete");
+                        f.delete();
                     }
                 }
             }
+        } else {
+            multiError = true; //error no multipart request
         }
         try {
             /* TODO output your page here. You may use following sample code. */
@@ -116,26 +136,31 @@ public class AddPostCServlet extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
 
-            if ((resPost == true) || (resFile == true)) {
-            // 
-                /*RequestDispatcher rd = request.getRequestDispatcher("/SeeGroup"); 
-                rd.forward(request, response);*/
-                response.sendRedirect(request.getContextPath()+ "/SeeGroup?id=" + group_id); //ridirigo alla pagina dove visualizzo i gruppi
-                return;
-            } else if ((post_content != null) && (post_content.length() == 0)) {
-                out.println("<h1>Post message can't be void, please retry</h1>");
-                out.println("<form action = 'SeeGroup' method='get' >"); // tasto riprova ad inserire i dati
-                out.println("<input type='hidden' value ='"+ group_id + "' name='id' >"); // devo ripubblicare l'id per via del filtro
+            if (multiError == true) {
+                out.println("<h1>File size error or servlet not called property</h1>");
+                out.println("<form action = 'SeeGroup' method='get' >");
+                out.println("<input type='hidden' value ='" + group_id + "' name ='id'>");
                 out.println("<input type='submit' value = 'Retry'/>");
                 out.println("</form>");
-            } else if ((resPost == true) && (resFile == false)){
+                
+            } else if ((resPost == true) || (resFile == true)) {
+                response.sendRedirect(request.getContextPath() + "/SeeGroup?id=" + group_id);
+                
+            } else if ((post_content != null) && (post_content.length() == 0)) {
+                out.println("<h1>Post message can't be void, please retry</h1>");
+                out.println("<form action = 'SeeGroup' method='get' >");
+                out.println("<input type='hidden' value ='" + group_id + "' name='id' >");
+                out.println("<input type='submit' value = 'Retry'/>");
+                out.println("</form>");
+                
+            } else if ((resPost == true) && (resFile == false)) {
                 out.println("<h1>Error uploading your file, please retry</h1>");
-                out.println("<form action = 'SeeGroup' method='get' >");// tasto riprova ad inserire i dati
-                out.println("<input type='hidden' value ='"+ group_id + "' name ='id'>"); // devo ripubblicare l'id per via del filtro
+                out.println("<form action = 'SeeGroup' method='get' >");
+                out.println("<input type='hidden' value ='" + group_id + "' name ='id'>");
                 out.println("<input type='submit' value = 'Retry'/>");
                 out.println("</form>");
             }
-
+            
             out.println("</body>");
             out.println("</html>");
         } finally {

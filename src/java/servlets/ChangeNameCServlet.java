@@ -47,16 +47,20 @@ public class ChangeNameCServlet extends HttpServlet {
         int group_id = 0;
         String group_name = null;
 
-        if ((request.getParameter("group_id")) == null) { // controllo se la servlet viene chiamata in modo appropriato (tramite il form) controllo in teoria inutile per l'esistenza del adminfilter
-            response.sendRedirect(request.getContextPath() + "/Home"); // se viene chiamata in modo sbagliato ridirigo alla home
-        } else {
+        try {
             group_id = Integer.parseInt(request.getParameter("group_id"));
-            group_name = request.getParameter("group_name");
+        } catch (NumberFormatException ex) {
+            System.out.println(ex);
         }
+        group_name = request.getParameter("group_name");
 
-        if (MyUtility.checkHtml(group_name) == true) { // controllo che il nome contenga solo caratteri ammessi
+        if ((group_id > 0) && (MyUtility.checkHtml(group_name) == true)) { // controllo che il nome contenga solo caratteri ammessi
+           
             res = manager.changeGroupName(group_name, group_id);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/Home");
         }
+        
         PrintWriter out = response.getWriter();
         try {
             /* TODO output your page here. You may use following sample code. */
@@ -76,8 +80,7 @@ public class ChangeNameCServlet extends HttpServlet {
                 out.println("<form action = 'ChangeName' method='post' >"); // tasto riprova ad inserire i dati
                 out.println("<input type='submit' value = 'Riprova'/>");
                 out.println("</form>");
-            }
-            else {
+            } else if (res == false) {
                 out.println("<h1>Error: name already used, please try another</h1>");
                 out.println("<form action = 'ChangeName' method='post' >"); // tasto riprova ad inserire i dati
                 out.println("<input type='submit' value = 'Riprova'/>");
@@ -102,11 +105,11 @@ public class ChangeNameCServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        /* try {
-         processRequest(request, response);
-         } catch (SQLException ex) {
-         Logger.getLogger(ChangeNameCServlet.class.getName()).log(Level.SEVERE, null, ex);
-         }*/
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(ChangeNameCServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

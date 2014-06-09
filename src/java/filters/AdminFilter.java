@@ -45,21 +45,26 @@ public class AdminFilter implements Filter {
         this.manager = (DBManager) request.getServletContext().getAttribute("dbmanager"); // ottengo la connessione al db
 
         int owner_id = 0;
-        String group_id = request.getParameter("group_id"); // passoto nell'url tramite get l'id del gruppo 
+        int group_id = 0;
+        
+        try {
+            group_id = Integer.parseInt(request.getParameter("group_id"));
+        } catch (NumberFormatException ex){
+            System.out.println(ex);
+        }
 
-        if ((user != null) && (group_id != null)) { 
+        if ((user != null) && (group_id > 0)) { 
             try {
-                owner_id = manager.getGroupOwner(Integer.parseInt(group_id)); // ottengo l'id del proprietario del gruppo
+                owner_id = manager.getGroupOwner(group_id); // ottengo l'id del proprietario del gruppo
             } catch (SQLException ex) {
                 Logger.getLogger(AdminFilter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
    
-        if ((user != null) && (owner_id == user.getUserId())) { // se il proprietario del gruppo e l'user attualmente nella sessione coincidono -> ok
+        if ((user != null) && (owner_id == user.getUserId())) { //se il proprietario del gruppo e l'user attualmente nella sessione coincidono -> ok
             chain.doFilter(request, response);
         } else {
             ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "/Home"); // altrimenti ridirigo alla home
-
         }
     }
 

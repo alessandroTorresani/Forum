@@ -12,7 +12,7 @@ package MyUtils;
 public class MyUtility {
 
     private static final String TITLE_REGEX = "^[a-zA-Z0-9]+(\\s[a-zA-Z0-9]+)*$"; // espressione regolare per i titoli dei gruppi
-    private static final String LINK_REGEX = "((https?|ftp)://)?([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])(\\.([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9]))+(/[A-Za-z0-9_\\.\\-~%]+)*/?"; // controllo del link
+    private static final String LINK_REGEX = "((https?|ftp)://)?([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])(\\.([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9]))+(/[A-Za-z\\?0-9_\\.\\-~%]+)*/?"; // controllo del link
 
     //private static final String LINK_REGEX_02 = "((https?|ftp|file)://)?[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";  
     //private static final String LINK_REGEX = "(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]"; 
