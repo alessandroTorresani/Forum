@@ -45,54 +45,6 @@ public class AcceptBidServlet extends HttpServlet {
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
 
-        /*HttpSession session = request.getSession();
-         User user = (User) session.getAttribute("user");
-         ArrayList<Integer> bidsIdsAcp = null; // inviti accettati
-         ArrayList<Integer> bidsIdsRef = null;// inviti rifiutati
-
-         String[] checkbox_params_acp = request.getParameterValues("acpBids"); // prendo gli id degli inviti accettati
-         if (checkbox_params_acp != null) {
-         bidsIdsAcp = new ArrayList<Integer>(checkbox_params_acp.length); //arraylist per controllo duplicati
-         for (int x = 0; x < checkbox_params_acp.length; x++) {
-         bidsIdsAcp.add(Integer.parseInt(checkbox_params_acp[x])); // aggiungo gli id all'arraylist
-         }
-         }
-
-         String[] checkbox_params_ref = request.getParameterValues("refBids"); // prendo gli id degli inviti rifiutati
-         if (checkbox_params_ref != null) {
-         bidsIdsRef = new ArrayList<Integer>(checkbox_params_ref.length); // arraylist per controllo duplicati
-         for (int x = 0; x < checkbox_params_ref.length; x++) {
-         bidsIdsRef.add(Integer.parseInt(checkbox_params_ref[x])); //aggiungo gli id all'arraylist
-         }
-         }
-
-         boolean error = false;
-         if (bidsIdsAcp != null && bidsIdsRef != null) { // se sono stati sia rifiutati che accettati inviti devo controllare         
-         for (int x = 0; x < bidsIdsRef.size(); x++) {
-         if (bidsIdsAcp.contains(bidsIdsRef.get(x))) {
-         error = true; // errore l'utente ha selezionato sia accetta che rifiuta 
-         break;
-         }
-         }
-         }
-
-         System.out.println("error= " + error);
-       
-         boolean bidsCheckedAcp = false;
-         boolean bidsCheckedRef = false;
-         if (error == false) { // se non ci sono inviti sia rifiutati che accettati contemporanemente allora posso eseguire la query
-
-         if ((bidsIdsAcp != null) && (manager.checkBids(bidsIdsAcp, user.getUserId()))) {
-         bidsCheckedAcp = true;
-         System.out.println("bidcheckedacp= " + bidsCheckedAcp);
-         manager.acceptBids(checkbox_params_acp, user.getUserId()); //accetto gli invito selezionati
-         }
-         if ((bidsIdsRef != null) && (manager.checkBids(bidsIdsRef, user.getUserId()))) {
-         bidsCheckedRef = true;
-         System.out.println("bidcheckedref= " + bidsCheckedRef);
-         manager.refuseBids(checkbox_params_ref); // rifiuto gli inviti selezionati
-         }  
-         } */
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
 

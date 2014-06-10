@@ -65,8 +65,10 @@ public class LoginServlet extends HttpServlet {
             cookie.setMaxAge(60 * 60 * 24 * 7); // durata una settimana
             response.addCookie(cookie); // pubblico il cookie
             session.setAttribute("user", user);
+             response.sendRedirect(request.getContextPath() + "/Home");// dirigo verso la home page
+        } else {
+            response.sendRedirect(request.getContextPath() + "/?login=failure");// dirigo verso la home page
         }
-        response.sendRedirect(request.getContextPath() + "/Home");// dirigo verso la home page
         
     }
 

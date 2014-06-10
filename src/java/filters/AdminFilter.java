@@ -53,7 +53,7 @@ public class AdminFilter implements Filter {
             System.out.println(ex);
         }
 
-        if ((user != null) && (group_id > 0)) { 
+        if (group_id > 0) { 
             try {
                 owner_id = manager.getGroupOwner(group_id); // ottengo l'id del proprietario del gruppo
             } catch (SQLException ex) {
@@ -61,7 +61,7 @@ public class AdminFilter implements Filter {
             }
         }
    
-        if ((user != null) && (owner_id == user.getUserId())) { //se il proprietario del gruppo e l'user attualmente nella sessione coincidono -> ok
+        if (owner_id == user.getUserId()) { //se il proprietario del gruppo e l'user attualmente nella sessione coincidono -> ok
             chain.doFilter(request, response);
         } else {
             ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "/Home"); // altrimenti ridirigo alla home

@@ -34,7 +34,7 @@ public class FirstServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
-        String error = (String) session.getAttribute("Error"); // stringa usata in casa di errore nel login
+        String loginResult = request.getParameter("login");// stringa usata in casa di errore nel login
 
         String off_style = "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" // stile offline -> boostrap
                 + "<link href='Style/css/bootstrap.min.css' rel='stylesheet' media='screen'>"
@@ -59,9 +59,9 @@ public class FirstServlet extends HttpServlet {
                     + "<h1>Forum - Login</h1>"
                     + "</div>");          
                     
-            if (error != null) {
-                out.println("<p>" + error + "</p>"); // dovrei fare un popup
-            }
+            if ((loginResult != null) && (loginResult.equals("failure")))
+                out.println("<p> Login errato </p>"); // dovrei fare un popup
+            
             
              out.println("<div id='form_id'  style='margin: 20px';>"); // form login
              out.println("<FORM action='Login' method ='POST'>");

@@ -39,14 +39,9 @@ public class LoginFilter implements Filter {
         User user = (User) ((HttpServletRequest) request).getSession().getAttribute("user");
         
         if (user != null) { // se esiste l'attributo user nella session
-            String error = (String)session.getAttribute("Error"); // controllo se c'è un messaggio di errore pubblicato nella session
-            if (error != null){
-                session.removeAttribute("Error"); // lo rimuovo
-            }
             chain.doFilter(request, response); // procedo verso la home
         } else {
-            session.setAttribute("Error", "Login errato"); // pubblico il messaggio di errore
-            ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "/"); // rimando alla pagina di login con un errore
+            ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "/?login=failure"); // rimando alla pagina di login con un errore
         }
 
     }

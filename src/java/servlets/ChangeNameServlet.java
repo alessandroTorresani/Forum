@@ -34,12 +34,13 @@ public class ChangeNameServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         int group_id = 0;
-        HttpSession session = request.getSession();
-        if ((request.getParameter("group_id")) == null) {
-            response.sendRedirect(request.getContextPath() + "/Home"); // se il parametro non viene passato, rimando alla home (controllo in teoria inutile per l'esistenza del filtro)
-        } else {
+        
+        try {
             group_id = Integer.parseInt(request.getParameter("group_id")); // altrimento salvo l'id del gruppo 
+        } catch (NumberFormatException ex){
+            System.out.println(ex);
         }
+        
         PrintWriter out = response.getWriter();
         // System.out.println("User id = " + user.getUserId() + "Group_id = " + group_id);
 

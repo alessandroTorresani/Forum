@@ -5,7 +5,7 @@
  */
 package servlets;
 
-import MyUtils.MyUtility;
+import MyUtility.MyUtility;
 import db.DBManager;
 import java.io.IOException;
 import java.io.PrintWriter;

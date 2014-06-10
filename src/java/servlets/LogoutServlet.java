@@ -41,7 +41,9 @@ public class LogoutServlet extends HttpServlet {
 
         for (int i = 0; i < cookies.length; i++) {
             cookie_name = cookies[i].getName();
-            cookie_value = cookies[i].getValue();
+            if (cookie_name.equals("hour_in/" + user.getUserId())) {
+                cookie_value = cookies[i].getValue();
+            }
         }
 
         Cookie cookie_out = new Cookie("hour_out/" + user.getUserId(), cookie_value); // creo il cookie per salvare l'ora di entrata dell'utente
@@ -58,22 +60,6 @@ public class LogoutServlet extends HttpServlet {
 
         response.sendRedirect(request.getContextPath() + "/"); // redirico alla pagina di login
 
-        /* PrintWriter out = response.getWriter();
-         try {
-         /* TODO output your page here. You may use following sample code. */
-        /* out.println("<!DOCTYPE html>");
-         out.println("<html>");
-         out.println("<head>");
-         out.println("<title>Servlet LogoutServlet</title>");            
-         out.println("</head>");
-         out.println("<body>");
-         out.println("<h1>Servlet LogoutServlet at " + request.getContextPath() + "</h1>");
-         out.println("</body>");
-         out.println("</html>");
-         } finally {            
-         out.close();
-         }
-         */
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

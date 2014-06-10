@@ -63,7 +63,7 @@ public class HomeServlet extends HttpServlet {
             cookie_name = cookie[i].getName();
             cookie_value = cookie[i].getValue();
             String[] parts = cookie_name.split("/"); // divido il nome del cookie per ricavarmi l'id che specifica a quale utente mi riferisco
-            if (("hour_out".equals(parts[0])) && (("" + user.getUserId()).equals(parts[1]))) { // appena lo trovo mi salvo il valore del cookie e lo stampo
+            if (("hour_out".equals(parts[0])) && (("" + user.getUserId()).equals(parts[1]))&&(cookie_value.length()>0)) { // appena lo trovo mi salvo il valore del cookie e lo stampo
                 ultimo_accesso = cookie_value;
             }
         }

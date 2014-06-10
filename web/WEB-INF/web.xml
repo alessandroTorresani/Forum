@@ -27,6 +27,15 @@
         <url-pattern>/CreateGroup</url-pattern>
         <url-pattern>/CreateGroupC</url-pattern>
         <url-pattern>/AcceptBid</url-pattern>
+        <url-pattern>/SeeGroup</url-pattern>
+        <url-pattern>/AddPost</url-pattern>
+        <url-pattern>/AddPostC</url-pattern>
+        <url-pattern>/usersFiles/*</url-pattern>
+        <url-pattern>/ChangeName</url-pattern>
+        <url-pattern>/ChangeNameC</url-pattern>
+        <url-pattern>/AddBids</url-pattern>
+        <url-pattern>/AddBidsC</url-pattern>
+        <url-pattern>/Report</url-pattern>
     </filter-mapping>
     <filter>
         <filter-name>groupFilter</filter-name>

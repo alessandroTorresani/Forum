@@ -61,7 +61,7 @@ public class CreateGroupCServlet extends HttpServlet {
         String group_name = request.getParameter("group_name"); // nome del gruppo
         Group created_group = null;
 
-        if ((group_name != null) && (MyUtils.MyUtility.checkHtml(group_name)) && (group_name.length() > 0)) { // controllo se è stato compilato il campo nome, e se contiene solo caratteri ammessi
+        if ((group_name != null) && (MyUtility.MyUtility.checkHtml(group_name)) && (group_name.length() > 0)) { // controllo se è stato compilato il campo nome, e se contiene solo caratteri ammessi
             created_group = manager.createGroup(user.getUserId(), group_name, dateFormat.format(date));// creo il gruppo
         }
 
@@ -88,7 +88,7 @@ public class CreateGroupCServlet extends HttpServlet {
          }
          }*/
 
-        System.out.println(group_name + " " + MyUtils.MyUtility.checkHtml(group_name));// + " " + group_name.length());
+        System.out.println(group_name + " " + MyUtility.MyUtility.checkHtml(group_name));// + " " + group_name.length());
 
         PrintWriter out = response.getWriter();
         try {
@@ -106,7 +106,7 @@ public class CreateGroupCServlet extends HttpServlet {
                 out.println("<form action = 'Home' method='post' >"); // tasto torna alla home
                 out.println("<input type='submit' value = 'Torna alla Home'/>");
                 out.println("</form>");
-            } else if ((group_name == null) || (MyUtils.MyUtility.checkHtml(group_name) == false)) { // se servlet chiamata illegalmente, o con input errato da errore
+            } else if ((group_name == null) || (MyUtility.MyUtility.checkHtml(group_name) == false)) { // se servlet chiamata illegalmente, o con input errato da errore
                 out.println("<h1> Error: one name required; use only alphanumeric characters, retry </h1>");
                 out.println("<form action = 'CreateGroup' method='post' >"); // tasto riprova ad inserire i dati
                 out.println("<input type='submit' value = 'Riprova'/>");
