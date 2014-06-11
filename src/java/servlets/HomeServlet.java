@@ -63,7 +63,7 @@ public class HomeServlet extends HttpServlet {
             cookie_name = cookie[i].getName();
             cookie_value = cookie[i].getValue();
             String[] parts = cookie_name.split("/"); // divido il nome del cookie per ricavarmi l'id che specifica a quale utente mi riferisco
-            if (("hour_out".equals(parts[0])) && (("" + user.getUserId()).equals(parts[1]))&&(cookie_value.length()>0)) { // appena lo trovo mi salvo il valore del cookie e lo stampo
+            if (("hour_out".equals(parts[0])) && (("" + user.getUserId()).equals(parts[1])) && (cookie_value.length() > 0)) { // appena lo trovo mi salvo il valore del cookie e lo stampo
                 ultimo_accesso = cookie_value;
             }
         }
@@ -91,99 +91,95 @@ public class HomeServlet extends HttpServlet {
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Forum Home</title>");
-            out.println("<link href=\"Style/css/bootstrap.css\" rel=\"stylesheet\">");
-            out.println("<meta charset=\"utf-8\">");
-            out.println("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">");
-            out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
+            out.println("<link href='Style/css/bootstrap.css' rel='stylesheet'>");
+            out.println("<meta charset='utf-8'>");
+            out.println("<meta http-equiv='X-UA-Compatible' content='IE=edge'>");
+            out.println("<meta name='viewport' content='width=device-width, initial-scale=1'>");
             out.println("</head>");
-            
+
             out.println("<body>");
-            out.println("<script src=\"Style/js/bootstrap.min.js\"></script>");
-            out.println("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js\"></script>");
-            out.println("<nav class=\"navbar navbar-default\" role=\"navigation\">");
-            out.println("<div class=\"container-fluid\">");
-            out.println("<div class=\"navbar-header\">");
-            out.println("<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">");
-            out.println("<span class=\"sr-only\">Toggle navigation</span>");
-            out.println("<span class=\"icon-bar\"></span>");
-            out.println("<span class=\"icon-bar\"></span>");
-            out.println("<span class=\"icon-bar\"></span>");
+            out.println("<script src='Style/js/bootstrap.min.js'></script>");
+            out.println("<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>");
+            out.println("<nav class='navbar navbar-default' role='navigation'>");
+            out.println("<div class='container-fluid'>");
+            out.println("<div class='navbar-header'>");
+            out.println("<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#bs-example-navbar-collapse-1'>");
+            out.println("<span class='sr-only'>Toggle navigation</span>");
+            out.println("<span class='icon-bar'></span>");
+            out.println("<span class='icon-bar'></span>");
+            out.println("<span class='icon-bar'></span>");
             out.println("</button>");
-            out.println("<a class=\"navbar-brand\" href=\"Home\"><b> Forum</b></a>");
-            out.println("</div>");
-            
-            out.println("<div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">");
+            out.println("<a class='navbar-brand' href='Home'><span class='glyphicon glyphicon-home'></span><b> Forum</b></a>");
             out.println("</div>");
 
-            out.println("</div><!-- /.container-fluid --> </nav>");
+            out.println("<div class='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>");
+            out.println("<ul class='nav navbar-nav navbar-left'>\n<li><a href='CreateGroup'><span class='glyphicon glyphicon-plus-sign'></span><b> Create group</b></a></li></ul>");
+            out.println("<ul class='nav navbar-nav navbar-right'><li><a><span class='glyphicon glyphicon-user'></span> " + user.getUsername() + "</a></li></ul>");
+            out.println("</div>");
+            out.println("</div></nav>");
 
-            out.println("");
+            out.println("<div style='width:80%; margin:0 auto;'>");
 
-            out.println("<h1 style='font-family:Sakkal Majalla;'> Home </h1>");
-            out.println("<p> Hi " + user.getUsername() + " </p>");
-            out.println("<h1> Groups you belong: </h1>");
+            out.println("<h1> Home </h1>");
 
+            out.println("<h3>Groups</h3>");
             if (groups.size() == 0) { // se l'utente non fa parte di nessun gruppo
-                out.println("<p> You don't have groups :( </p>");
+                out.println("<p> You don't have groups </p>");
             } else {
-                out.println("<table border='1'>"); // altimenti creo una tabella per visualizzare i gruppi
+
+                out.println("<div class='panel panel-default'>");
+                out.println("<table class='table'>"); // altimenti creo una tabella per visualizzare i gruppi
                 out.println("<tr>");
 
-                out.println("<th> Change name </th>");
                 out.println("<th> Group Name </th>");
                 out.println("<th> Owner  </th>");
                 out.println("<th> Creation date </th>");
-                out.println("<th> Admin </th>");
-                out.println("<th> Report </th>");
+                out.println("<th></th>");
+                out.println("<th></th>");
+                out.println("<th></th>");
 
                 out.println("</tr>");
 
                 for (int x = 0; x < groups.size(); x++) { // stampo i gruppi
                     out.println("<tr>");
 
+                    out.println("<td>" + "<a href='SeeGroup?id=" + groups.get(x).getGroupId() + "'>" + groups.get(x).getGroupName() + "</a> </td>");
+                    out.println("<td>" + groups.get(x).getOwnerName() + "</td>");
+                    out.println("<td>" + groups.get(x).getCreationDate() + "</td>");
                     if (groups.get(x).getOwner() == user.getUserId()) { // tasto solo per l'admin del gruppo per poterlo modificare
                         out.println("<td> <form action ='ChangeName' method ='get'>"
                                 + "<input type='hidden' value = '" + groups.get(x).getGroupId() + "' name='group_id' >"
                                 + "<input type='submit' value='Change name' style='width:100%'>"
                                 + "</form></td>");
-                    } else {
-                        out.println("<td> </td>");
-                    }
-
-                    out.println("<td>" + "<a href='SeeGroup?id=" + groups.get(x).getGroupId() + "'>" + groups.get(x).getGroupName() + "</a> </td>");
-                    out.println("<td>" + groups.get(x).getOwnerName() + "</td>");
-                    out.println("<td>" + groups.get(x).getCreationDate() + "</td>");
-
-                    if (groups.get(x).getOwner() == user.getUserId()) { // tasto solo per l'admin del gruppo per poterlo modificare
                         out.println("<td> <form action='AddBids' method='get'>"
                                 + "<input type='hidden' value = '" + groups.get(x).getGroupId() + "' name='group_id' >"
                                 + "<input type='submit' value='Invite' style='width:100%'>"
                                 + "</form></td>");
 
-                    } else {
-                        out.println("<td> </td>");
-                    }
-                    if (groups.get(x).getOwner() == user.getUserId()) { // tasto solo per l'admin del gruppo per ottenere il pdf del report
-                        out.println("<td> <form action ='Report' method ='get'>"
+                        out.println("<td> <form action ='Report' method ='get' target='_blank'>"
                                 + "<input type='hidden' value = '" + groups.get(x).getGroupId() + "' name='group_id' >"
                                 + "<input type='submit' value='Report' style='width:100%'>"
                                 + "</form></td>");
                     } else {
                         out.println("<td> </td>");
+                        out.println("<td> </td>");
+                        out.println("<td> </td>");
                     }
 
                     out.println("</tr>");
                 }
-                out.println("</table");
+                out.println("</table>");
+                out.println("</div>");
             }
 
             out.println("<br>");
-            out.println("<h1>Invitations: </h1>");
+            out.println("<h3>Invitations</h3>");
 
             if (bids.size() == 0) {
-                out.println("<p> You have no bids :(");
+                out.println("<p> You have no bids ");
             } else {
-                out.println("<table border='1'>"); // altimenti creo una tabella per visualizzare gli inviti
+                out.println("<div class='panel panel-default'>");
+                out.println("<table class='table'>");
                 out.println("<tr>");
 
                 out.println("<th> Group Name </th>");
@@ -206,6 +202,7 @@ public class HomeServlet extends HttpServlet {
                 }
 
                 out.println("</table>");
+                out.println("</div>");
                 out.println("<input type='submit' value = 'Submit'/>");
                 out.println("</form>");
                 out.println("<br>");
@@ -213,10 +210,6 @@ public class HomeServlet extends HttpServlet {
             }
 
             out.println("<br>");
-
-            out.println("<form action = 'CreateGroup' method='get' >"); // tasto crea gruppo
-            out.println("<input type='submit' value = 'Create group'/>");
-            out.println("</form>");
 
             out.println("<form action = 'Logout' method='POST' >"); // tasto logout
             out.println("<input type='submit' value = 'Logout'/>");
@@ -227,7 +220,7 @@ public class HomeServlet extends HttpServlet {
             } else {
                 out.println("<p> Last access: First access or invalid/removed cookie </p>");
             }
-
+            out.println("</div>");
             out.println("</body>");
             out.println("</html>");
         } finally {

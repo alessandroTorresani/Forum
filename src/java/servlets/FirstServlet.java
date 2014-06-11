@@ -41,10 +41,9 @@ public class FirstServlet extends HttpServlet {
                 + "<script src='http://code.jquery.com/jquery.js'></script>"
                 + "<script src='Style/js/bootstrap.min.js'></script>";
 
-        String on_style = "<link rel=\"stylesheet\" href=\"http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css\" />\n" // stile online -> jquery mobile
-                + "<script src=\"http://code.jquery.com/jquery-1.8.2.min.js\"></script>\n"
-                + "<script src=\"http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js\"></script>";
-
+        String on_style = "<link rel='stylesheet' href='http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css' />\n" // stile online -> jquery mobile
+                + "<script src='http://code.jquery.com/jquery-1.8.2.min.js'></script>\n"
+                + "<script src='http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js'></script>";
 
         try {
             /* TODO output your page here. You may use following sample code. */
@@ -52,24 +51,47 @@ public class FirstServlet extends HttpServlet {
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Forum Login</title>");
-            out.println(off_style);
+            out.println("<link href='Style/css/bootstrap.css' rel='stylesheet'>");
+            out.println("<meta charset='utf-8'>");
+            out.println("<meta http-equiv='X-UA-Compatible' content='IE=edge'>");
+            out.println("<meta name='viewport' content='width=device-width, initial-scale=1'>");
             out.println("</head>");
+
             out.println("<body>");
-            out.println("<div id=\"header\" style='margin:20px';>" // header
+            out.println("<script src='Style/js/bootstrap.min.js'></script>");
+            out.println("<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>");
+            out.println("<nav class='navbar navbar-default' role='navigation'>");
+            out.println("<div class='container-fluid'>");
+            out.println("<div class='navbar-header'>");
+            out.println("<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#bs-example-navbar-collapse-1'>");
+            out.println("<span class='sr-only'>Toggle navigation</span>");
+            out.println("<span class='icon-bar'></span>");
+            out.println("<span class='icon-bar'></span>");
+            out.println("<span class='icon-bar'></span>");
+            out.println("</button>");
+            out.println("<a class='navbar-brand' href='Home'><span class='glyphicon glyphicon-home'></span><b> Forum</b></a>");
+            out.println("</div>");
+            out.println("</div></nav>");
+
+            out.println("<div style='width:80%; margin:0 auto;'>");
+            out.println("<div id='header' style='margin:20px';>" // header
                     + "<h1>Forum - Login</h1>"
-                    + "</div>");          
-                    
-            if ((loginResult != null) && (loginResult.equals("failure")))
+                    + "</div>");
+
+            if ((loginResult != null) && (loginResult.equals("failure"))) {
                 out.println("<p> Login errato </p>"); // dovrei fare un popup
+            }
+
+            out.println("<div id='form_id'  style='margin: 20px';>"); // form login
+            out.println("<FORM action='Login' method ='POST'>");
+            out.println("Username: <input type='text' name='username'> <br />");
+            out.println("Password:  <input type='password' name='password'> <br />");
+            out.println("<INPUT type='submit' value='Login'>");
+            out.println("</FORM>");
             
-            
-             out.println("<div id='form_id'  style='margin: 20px';>"); // form login
-             out.println("<FORM action='Login' method ='POST'>");
-             out.println("Username: <input type='text' name='username'> <br />");
-             out.println("Password:  <input type='password' name='password'> <br />");
-             out.println("<INPUT type='submit' value='Login'>");
-             out.println("</FORM>");
-             out.println("</div>");
+            out.println("</div>");
+            out.println("</body>");
+            out.println("</html>");
 
         } finally {
             out.close();

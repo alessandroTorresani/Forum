@@ -18,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -43,6 +44,10 @@ public class AddBidsServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
+        
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        
         int group_id = Integer.parseInt(request.getParameter("group_id"));
         List<Integer> first_filter = new ArrayList(); // primo filtro di id, ottengo gli id degli utenti che non fanno gia parte del gruppo
         List<Integer> second_filter = new ArrayList(); // secondo filtro per ottenere gli utenti che non hanno gia un invito attivo per tale gruppo
@@ -109,10 +114,35 @@ public class AddBidsServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Send bids</title>");
+            out.println("<title>Add Bids</title>");
+            out.println("<link href='Style/css/bootstrap.css' rel='stylesheet'>");
+            out.println("<meta charset='utf-8'>");
+            out.println("<meta http-equiv='X-UA-Compatible' content='IE=edge'>");
+            out.println("<meta name='viewport' content='width=device-width, initial-scale=1'>");
             out.println("</head>");
-            out.println("<body>");
 
+            out.println("<body>");
+            out.println("<script src='Style/js/bootstrap.min.js'></script>");
+            out.println("<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>");
+            out.println("<nav class='navbar navbar-default' role='navigation'>");
+            out.println("<div class='container-fluid'>");
+            out.println("<div class='navbar-header'>");
+            out.println("<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#bs-example-navbar-collapse-1'>");
+            out.println("<span class='sr-only'>Toggle navigation</span>");
+            out.println("<span class='icon-bar'></span>");
+            out.println("<span class='icon-bar'></span>");
+            out.println("<span class='icon-bar'></span>");
+            out.println("</button>");
+            out.println("<a class='navbar-brand' href='Home'><span class='glyphicon glyphicon-home'></span><b> Forum</b></a>");
+            out.println("</div>");
+
+            out.println("<div class='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>");
+            out.println("<ul class='nav navbar-nav navbar-right'><li><a><span class='glyphicon glyphicon-user'></span> " + user.getUsername() + "</a></li></ul>");
+            out.println("</div>");
+            out.println("</div></nav>");
+
+            out.println("<div style='width:80%; margin:0 auto;'>");
+            
             if (users.size() > 0) {
                 out.println("<h1>Who do you want to invite ? </h1>");
                  
@@ -134,6 +164,7 @@ public class AddBidsServlet extends HttpServlet {
                 out.println("</form>");
             }
 
+            out.println("</div>");
             out.println("</body>");
             out.println("</html>");
         } finally {

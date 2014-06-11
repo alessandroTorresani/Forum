@@ -7,6 +7,7 @@ package servlets;
 
 import MyUtility.MyUtility;
 import db.DBManager;
+import db.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -16,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -43,6 +45,9 @@ public class ChangeNameCServlet extends HttpServlet {
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
 
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        
         boolean res = false; // variabile per sapere se l'operazione è andata a buon fine (funzione non ancora implementata)
         int group_id = 0;
         String group_name = null;
@@ -67,9 +72,34 @@ public class ChangeNameCServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Change Name result</title>");
+            out.println("<title>Change Name Group Confirmed</title>");
+            out.println("<link href='Style/css/bootstrap.css' rel='stylesheet'>");
+            out.println("<meta charset='utf-8'>");
+            out.println("<meta http-equiv='X-UA-Compatible' content='IE=edge'>");
+            out.println("<meta name='viewport' content='width=device-width, initial-scale=1'>");
             out.println("</head>");
+
             out.println("<body>");
+            out.println("<script src='Style/js/bootstrap.min.js'></script>");
+            out.println("<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>");
+            out.println("<nav class='navbar navbar-default' role='navigation'>");
+            out.println("<div class='container-fluid'>");
+            out.println("<div class='navbar-header'>");
+            out.println("<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#bs-example-navbar-collapse-1'>");
+            out.println("<span class='sr-only'>Toggle navigation</span>");
+            out.println("<span class='icon-bar'></span>");
+            out.println("<span class='icon-bar'></span>");
+            out.println("<span class='icon-bar'></span>");
+            out.println("</button>");
+            out.println("<a class='navbar-brand' href='Home'><span class='glyphicon glyphicon-home'></span><b> Forum</b></a>");
+            out.println("</div>");
+
+            out.println("<div class='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>");
+            out.println("<ul class='nav navbar-nav navbar-right'><li><a><span class='glyphicon glyphicon-user'></span> " + user.getUsername() + "</a></li></ul>");
+            out.println("</div>");
+            out.println("</div></nav>");
+
+            out.println("<div style='width:80%; margin:0 auto;'>");
             if (res == true) {
                 out.println("<h1>Group' name changed succesfully </h1>");
                 out.println("<form action = 'Home' method='post' >"); // tasto torna alla home
@@ -86,6 +116,7 @@ public class ChangeNameCServlet extends HttpServlet {
                 out.println("<input type='submit' value = 'Riprova'/>");
                 out.println("</form>");
             }
+            out.println("</div>");
             out.println("</body>");
             out.println("</html>");
         } finally {

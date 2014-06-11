@@ -124,25 +124,49 @@ public class AcceptBidServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Bid Result</title>");
+            out.println("<title>Accept Bids Confirmed</title>");
+            out.println("<link href='Style/css/bootstrap.css' rel='stylesheet'>");
+            out.println("<meta charset='utf-8'>");
+            out.println("<meta http-equiv='X-UA-Compatible' content='IE=edge'>");
+            out.println("<meta name='viewport' content='width=device-width, initial-scale=1'>");
             out.println("</head>");
+
             out.println("<body>");
-            System.out.println("prova1");
+            out.println("<script src='Style/js/bootstrap.min.js'></script>");
+            out.println("<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>");
+            out.println("<nav class='navbar navbar-default' role='navigation'>");
+            out.println("<div class='container-fluid'>");
+            out.println("<div class='navbar-header'>");
+            out.println("<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#bs-example-navbar-collapse-1'>");
+            out.println("<span class='sr-only'>Toggle navigation</span>");
+            out.println("<span class='icon-bar'></span>");
+            out.println("<span class='icon-bar'></span>");
+            out.println("<span class='icon-bar'></span>");
+            out.println("</button>");
+            out.println("<a class='navbar-brand' href='Home'><span class='glyphicon glyphicon-home'></span><b> Forum</b></a>");
+            out.println("</div>");
+
+            out.println("<div class='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>");
+            out.println("<ul class='nav navbar-nav navbar-right'><li><a><span class='glyphicon glyphicon-user'></span> " + user.getUsername() + "</a></li></ul>");
+            out.println("</div>");
+            out.println("</div></nav>");
+
+            out.println("<div style='width:80%; margin:0 auto;'>");
             if ((accBids == null) && (refBids == null)) {
                 out.println("<h1> No bids selected, retry </h1>");
             } /*if (((accBids != null)&&(accBids.size() == 0))&&((refBids!=null)&&(refBids.size()==0)))  {
-             System.out.println("prova");
              out.println("<h1> No bids selected, retry </h1>");
              }*/ else if (accError == true || refError == true) {
                 response.sendRedirect(request.getContextPath() + "/Home");
             } else if (conflictError == true) {
                 out.println("<h1>Invitation with the accept/refuse conflict not done</h1>");
             } else {
-                out.println("<h1> Operation on your invitation done correctly :)</h1>");
+                out.println("<h1> Operation on your invitation done correctly</h1>");
             }
             out.println("<form action = 'Home' method='get' >"); // tasto torna alla home
             out.println("<input type='submit' value = 'Back to home'/>");
             out.println("</form>");
+            out.println("</div>");
             out.println("</body>");
             out.println("</html>");
         } finally {
