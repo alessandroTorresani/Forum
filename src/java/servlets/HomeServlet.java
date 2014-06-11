@@ -51,7 +51,7 @@ public class HomeServlet extends HttpServlet {
         HttpSession session = request.getSession();
         List<Group> groups; // gruppi a cui un utente è inscritto
         List<Bid> bids; // inviti che ha ricevuto
-        User user = (User) session.getAttribute("user"); // sono sicuro che user sia diverso da null per il filtro
+        User user = (User) session.getAttribute("user");
 
         String cookie_name = null;
         String cookie_value = null;
@@ -59,16 +59,16 @@ public class HomeServlet extends HttpServlet {
 
         Cookie cookie[] = request.getCookies(); // prendo tutti i cookie 
 
-        for (int i = 0; i < cookie.length; i++) { // cerco il cookie chiamato hour_out/id_ dove utente loggato dove avevo salvato l'ora dell'ultimo accesso
+        for (int i = 0; i < cookie.length; i++) { // cerco il cookie chiamato hour_out/id_user
             cookie_name = cookie[i].getName();
             cookie_value = cookie[i].getValue();
             String[] parts = cookie_name.split("/"); // divido il nome del cookie per ricavarmi l'id che specifica a quale utente mi riferisco
-            if (("hour_out".equals(parts[0])) && (("" + user.getUserId()).equals(parts[1])) && (cookie_value.length() > 0)) { // appena lo trovo mi salvo il valore del cookie e lo stampo
+            if (("hour_out".equals(parts[0])) && (("" + user.getUserId()).equals(parts[1])) && (cookie_value.length() > 0)) { // appena lo trovo mi salvo il valore del cookie
                 ultimo_accesso = cookie_value;
             }
         }
 
-        // recupero i gruppi a cui partecipa l'utente tramitei l suo id
+        // recupero i gruppi a cui partecipa l'utente usando il suo id
         try {
             groups = manager.getGroups(user.getUserId());
 
@@ -86,7 +86,6 @@ public class HomeServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
         try {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -214,6 +213,7 @@ public class HomeServlet extends HttpServlet {
             out.println("<form action = 'Logout' method='POST' >"); // tasto logout
             out.println("<input type='submit' value = 'Logout'/>");
             out.println("</form>");
+            out.println("<br>");
 
             if (ultimo_accesso != null) { // data ultimo accesso
                 out.println("<p> Last access: " + ultimo_accesso + "</p>");

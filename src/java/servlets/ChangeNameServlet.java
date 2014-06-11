@@ -39,7 +39,7 @@ public class ChangeNameServlet extends HttpServlet {
         int group_id = 0;
         
         try {
-            group_id = Integer.parseInt(request.getParameter("group_id")); // altrimento salvo l'id del gruppo 
+            group_id = Integer.parseInt(request.getParameter("group_id")); 
         } catch (NumberFormatException ex){
             System.out.println(ex);
         }
@@ -47,7 +47,6 @@ public class ChangeNameServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         
         try {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -80,7 +79,7 @@ public class ChangeNameServlet extends HttpServlet {
 
             out.println("<div style='width:85%; margin:0 auto;'>");
             out.println("<h1> Insert new Name (Use only numbers and alpahumeric characters)</h1>");
-            out.println("<form action = 'ChangeNameC' method='post' >"); // Form per cambiare il nome
+            out.println("<form action = 'ChangeNameC' method='post' >"); 
             out.println("Group name:  <input type='text' name='group_name'>");
             out.println("<input type='hidden' value = '" + group_id + "' name='group_id'>");
             out.println("<input type='submit' value = 'Submit'/>");

@@ -48,21 +48,21 @@ public class AcceptBidServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
 
-        String[] acceptedBids = request.getParameterValues("acpBids"); //checkbox params
-        String[] refusedBids = request.getParameterValues("refBids");
+        String[] acceptedBids = request.getParameterValues("acpBids"); //inviti accettati
+        String[] refusedBids = request.getParameterValues("refBids"); //inviti rigiutati
 
-        List<String> accBids = null; //lists for bids ids
-        List<String> refBids = null;
-        List<String> conflicts = null;
+        List<String> accBids = null; //lista degli inviti accettati
+        List<String> refBids = null; //lista degli inviti rifiutati
+        List<String> conflicts = null; //lista dei conflitti
 
-        if (acceptedBids != null) { //fill accepting list
+        if (acceptedBids != null) { //riempimento lista inviti accettati
             accBids = new ArrayList(acceptedBids.length);
             for (int x = 0; x < acceptedBids.length; x++) {
                 accBids.add(acceptedBids[x]);
             }
         }
 
-        if (refusedBids != null) { // fill refused list
+        if (refusedBids != null) { //riempimento lista inviti rifiutati
             refBids = new ArrayList(refusedBids.length);
             for (int x = 0; x < refusedBids.length; x++) {
                 refBids.add(refusedBids[x]);
@@ -70,7 +70,7 @@ public class AcceptBidServlet extends HttpServlet {
         }
 
         boolean conflictError = false;
-        if ((accBids != null) && (refBids != null)) { //check for conflicts
+        if ((accBids != null) && (refBids != null)) { //controllo dei conflitti
             conflicts = new ArrayList(acceptedBids.length + refusedBids.length);
             for (int x = 0; x < accBids.size(); x++) {
                 for (int y = 0; y < refBids.size(); y++) {
@@ -81,7 +81,7 @@ public class AcceptBidServlet extends HttpServlet {
                 }
             }
 
-            for (int x = 0; x < conflicts.size(); x++) { //remove conflicts
+            for (int x = 0; x < conflicts.size(); x++) { //rimuovo gli inviti con conflitti
                 accBids.remove(conflicts.get(x));
                 refBids.remove(conflicts.get(x));
             }
@@ -89,10 +89,10 @@ public class AcceptBidServlet extends HttpServlet {
 
         boolean accError = false;
         boolean refError = false;
-        if (accBids != null) { //check,accept and remove accepted bids
+        if (accBids != null) {
 
             for (int x = 0; x < accBids.size(); x++) {
-                if (manager.checkBids(user.getUserId(), Integer.parseInt(accBids.get(x))) == true) { //check if those bids are present and are referred to this user
+                if (manager.checkBids(user.getUserId(), Integer.parseInt(accBids.get(x))) == true) { //controllo dell'invito accettato e invio
                     accBids.remove(x);
                     accError = true;
                 }
@@ -105,7 +105,7 @@ public class AcceptBidServlet extends HttpServlet {
 
             for (int x = 0; x < refBids.size(); x++) {
 
-                if (manager.checkBids(user.getUserId(), Integer.parseInt(refBids.get(x))) == true) {
+                if (manager.checkBids(user.getUserId(), Integer.parseInt(refBids.get(x))) == true) { //controllo dell'invito rifiutato
                     refBids.remove(x);
                     refError = true;
                 }
@@ -116,7 +116,6 @@ public class AcceptBidServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -150,16 +149,14 @@ public class AcceptBidServlet extends HttpServlet {
             out.println("<div style='width:80%; margin:0 auto;'>");
             if ((accBids == null) && (refBids == null)) {
                 out.println("<h1> No bids selected, retry </h1>");
-            } /*if (((accBids != null)&&(accBids.size() == 0))&&((refBids!=null)&&(refBids.size()==0)))  {
-             out.println("<h1> No bids selected, retry </h1>");
-             }*/ else if (accError == true || refError == true) {
+            } else if (accError == true || refError == true) {
                 response.sendRedirect(request.getContextPath() + "/Home");
             } else if (conflictError == true) {
                 out.println("<h1>Invitation with the accept/refuse conflict not done</h1>");
             } else {
                 out.println("<h1> Operation on your invitation done correctly</h1>");
             }
-            out.println("<form action = 'Home' method='get' >"); // tasto torna alla home
+            out.println("<form action = 'Home' method='get' >"); 
             out.println("<input type='submit' value = 'Back to home'/>");
             out.println("</form>");
             out.println("</div>");

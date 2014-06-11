@@ -121,7 +121,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>First</servlet-name>
-        <!-- <url-pattern>/Forum</url-pattern> -->
         <url-pattern>/First</url-pattern>
     </servlet-mapping>
     <servlet-mapping>

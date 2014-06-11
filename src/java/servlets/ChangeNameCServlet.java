@@ -48,10 +48,10 @@ public class ChangeNameCServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         
-        boolean res = false; // variabile per sapere se l'operazione è andata a buon fine (funzione non ancora implementata)
+        boolean res = false; // variabile per sapere se l'operazione è andata a buon fine
         int group_id = 0;
         String group_name = null;
-
+        
         try {
             group_id = Integer.parseInt(request.getParameter("group_id"));
         } catch (NumberFormatException ex) {
@@ -62,13 +62,10 @@ public class ChangeNameCServlet extends HttpServlet {
         if ((group_id > 0) && (MyUtility.checkHtml(group_name) == true)) { // controllo che il nome contenga solo caratteri ammessi
            
             res = manager.changeGroupName(group_name, group_id);
-        } else {
-            response.sendRedirect(request.getContextPath() + "/Home");
-        }
+        } 
         
         PrintWriter out = response.getWriter();
         try {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");

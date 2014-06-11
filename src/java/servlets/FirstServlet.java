@@ -34,19 +34,9 @@ public class FirstServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
-        String loginResult = request.getParameter("login");// stringa usata in casa di errore nel login
-
-        String off_style = "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" // stile offline -> boostrap
-                + "<link href='Style/css/bootstrap.min.css' rel='stylesheet' media='screen'>"
-                + "<script src='http://code.jquery.com/jquery.js'></script>"
-                + "<script src='Style/js/bootstrap.min.js'></script>";
-
-        String on_style = "<link rel='stylesheet' href='http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css' />\n" // stile online -> jquery mobile
-                + "<script src='http://code.jquery.com/jquery-1.8.2.min.js'></script>\n"
-                + "<script src='http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js'></script>";
+        String loginResult = request.getParameter("login");
 
         try {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -79,7 +69,7 @@ public class FirstServlet extends HttpServlet {
                     + "</div>");
 
             if ((loginResult != null) && (loginResult.equals("failure"))) {
-                out.println("<p> Login errato </p>"); // dovrei fare un popup
+                out.println("<p> Login errato </p>"); 
             }
 
             out.println("<div id='form_id'  style='margin: 20px';>"); // form login

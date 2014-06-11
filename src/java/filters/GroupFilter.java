@@ -33,25 +33,22 @@ public class GroupFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         this.filterConfig = filterConfig;
 
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         HttpSession session = ((HttpServletRequest) request).getSession();
-        User user = (User) ((HttpServletRequest) request).getSession().getAttribute("user"); // ottengo l'attributo manager
-        this.manager = (DBManager) request.getServletContext().getAttribute("dbmanager"); // ottengo la connessione al database
+        User user = (User) ((HttpServletRequest) request).getSession().getAttribute("user"); // ottengo l'attributo user
+        this.manager = (DBManager) request.getServletContext().getAttribute("dbmanager"); //connessione al database
         int id_group = 0; // se non riesce il parsing rimane questo valore che viene considerato errore
-        boolean parsed = true; // controllo se il valore passato come id è convertibile in un intero
         List<Integer> users = null; // lista che conterrà tutti gli id ammessi al gruppo
 
         try {
             id_group = Integer.parseInt(request.getParameter("id")); // ottengo l'id passato per l'url (devo controllare che venga passato un int e non qualcos'altro)
-        } catch (Exception e) {
-            parsed = false;
+        } catch (Exception ex) {
+            System.out.println(ex);
         }
 
         if (id_group > 0) { // se l'input è stato passato correttamente
@@ -72,7 +69,6 @@ public class GroupFilter implements Filter {
 
     @Override
     public void destroy() {
-        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

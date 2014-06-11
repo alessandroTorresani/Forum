@@ -47,13 +47,12 @@ public class ReportServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<Integer> users_ids;
-        List<String> users_names;
-        List<User> users;
-        String lastPostMade;
-        int numberOfPosts;
-        int group_id = Integer.parseInt(request.getParameter("group_id"));
-        String group_name;
+        List<Integer> users_ids; //id degli utenti iscritti
+        List<String> users_names; //nome degli utenti inscritti
+        String lastPostMade; // data ultimo post
+        int numberOfPosts; //numbero di post
+        int group_id = Integer.parseInt(request.getParameter("group_id")); //id del gruppo
+        String group_name; //nome del gruppo
 
         PrintWriter out = response.getWriter();
         response.setContentType("application/pdf");
@@ -88,7 +87,7 @@ public class ReportServlet extends HttpServlet {
         }
         
         try {
-            group_name = manager.getGroupName(group_id);
+            group_name = manager.getGroupName(group_id); //ottengo il nome del gruppo
         } catch (SQLException ex){
              Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, ex.toString(), ex);
             throw new ServletException(ex);
@@ -116,7 +115,7 @@ public class ReportServlet extends HttpServlet {
         p1.add(new Text(p,""));
         
         p1.add(new Text(p, "- Number of post: "));
-        p1.add(new Text(p, "*   "+numberOfPosts)); // query da fare
+        p1.add(new Text(p, "*   "+numberOfPosts)); 
         p.add(p1);
         p.setAuthor("Alessandro");
         p.writePDF();

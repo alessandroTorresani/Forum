@@ -24,17 +24,14 @@ import javax.servlet.http.HttpSession;
 public class LoginFilter implements Filter {
 
     private FilterConfig filterConfig;
-    // manca il logger qui
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         this.filterConfig = filterConfig;
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         HttpSession session = ((HttpServletRequest) request).getSession();
         User user = (User) ((HttpServletRequest) request).getSession().getAttribute("user");
         
@@ -48,6 +45,5 @@ public class LoginFilter implements Filter {
 
     @Override
     public void destroy() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

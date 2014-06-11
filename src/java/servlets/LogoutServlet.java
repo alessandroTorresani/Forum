@@ -33,9 +33,9 @@ public class LogoutServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        HttpSession session = request.getSession(false); // sono sicuro che ci sia attiva una sessione
-        User user = (User) session.getAttribute("user"); // se il filtro non interviene c'è di sicuro un user
-        Cookie cookies[] = request.getCookies();
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute("user");
+        Cookie cookies[] = request.getCookies(); //ottengo i cookies
         String cookie_name = null;
         String cookie_value = null;
 
@@ -56,7 +56,7 @@ public class LogoutServlet extends HttpServlet {
         response.addCookie(cookie_out); // setto quello di uscita per memorizzare l'ultima data di accesso
 
         session.removeAttribute("user"); // elimino l'attributo user
-        session.invalidate(); // invalido la session
+        session.invalidate(); // invalido la sessione
 
         response.sendRedirect(request.getContextPath() + "/"); // redirico alla pagina di login
 

@@ -62,7 +62,7 @@ public class AddBidsCServlet extends HttpServlet {
 
             if (checkbox_params.length > 0) {
                 try {
-                    manager.sendBids(ids, group_id, user.getUserId());
+                    manager.sendBids(ids, group_id, user.getUserId()); //mando gli inviti
                 } catch (SQLException ex) {
                     Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, ex.toString(), ex);
                     throw new ServletException(ex);
@@ -73,7 +73,6 @@ public class AddBidsCServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
         try {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");

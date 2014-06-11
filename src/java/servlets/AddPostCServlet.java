@@ -55,13 +55,13 @@ public class AddPostCServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        int group_id = Integer.parseInt(request.getParameter("id")); // prendo l'id
-        String uploadDir = request.getServletContext().getRealPath("/") + File.separator + "usersFiles" + File.separator + group_id;  // cartella dove carico i file! + id del gruppo! DEVO CREARE LA CARTELLA DEL GRUPPO AL MOMENTO DELLA CREAZIONE
+        int group_id = Integer.parseInt(request.getParameter("id")); // prendo l'id del gruppo
+        String uploadDir = request.getServletContext().getRealPath("/") + File.separator + "usersFiles" + File.separator + group_id;  // cartella dove carico i file! + id del gruppo!
 
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // data per la creazione del gruppo
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // data per la creazione del post
         Date date = new Date();
         int post_id = -1;
         boolean resPost = false;
@@ -77,7 +77,7 @@ public class AddPostCServlet extends HttpServlet {
             System.out.println(ex.toString());
         }
         
-        if (multi != null) {
+        if (multi != null) { //se la richiesta è multipart
             post_content = multi.getParameter("post_content"); // ottengo il contenuto del post da multi
             if ((post_content != null) && (post_content.length() > 0)) {
                 post_content = MyUtility.cleanHTMLTags(post_content); // pulisco il codice da i caratteri html
@@ -89,7 +89,7 @@ public class AddPostCServlet extends HttpServlet {
 
                 if (post_id > -1) {
                     Enumeration files = multi.getFileNames();
-                    // ottengo il file (solo un file in upload) 
+                    // ottengo il file 
                     while (files.hasMoreElements()) {
                         String name = ((String) files.nextElement());
 
@@ -99,7 +99,7 @@ public class AddPostCServlet extends HttpServlet {
                         }
                     }
                 } else {
-                    Enumeration files = multi.getFileNames(); //if something in the post creation went wrong, and was uploaded a file -> delete the file
+                    Enumeration files = multi.getFileNames(); //se la creazione non va a buon fine, devo comunque eliminare il file caricato
                     while (files.hasMoreElements()) {
                         String name = ((String) files.nextElement());
                         f = multi.getFile(name);
@@ -109,7 +109,7 @@ public class AddPostCServlet extends HttpServlet {
                     }
                 }
             } else {
-                Enumeration files = multi.getFileNames(); //if the post content was empty, delete the uploaded file if there is
+                Enumeration files = multi.getFileNames(); //se il contenuto del post era vuoto, devo comunque eliminare il file caricato
                 while (files.hasMoreElements()) {
                     String name = ((String) files.nextElement());
                     f = multi.getFile(name);
@@ -119,10 +119,9 @@ public class AddPostCServlet extends HttpServlet {
                 }
             }
         } else {
-            multiError = true; //error no multipart request
+            multiError = true; //errore no multipart request
         }
         try {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -155,24 +154,24 @@ public class AddPostCServlet extends HttpServlet {
 
             out.println("<div style='width:80%; margin:0 auto;'>");
             
-            if (multiError == true) {
+            if (multiError == true) { // chiamata illecita o file troppo grande
                 out.println("<h1>File size error or servlet not called property</h1>");
                 out.println("<form action = 'SeeGroup' method='get' >");
                 out.println("<input type='hidden' value ='" + group_id + "' name ='id'>");
                 out.println("<input type='submit' value = 'Retry'/>");
                 out.println("</form>");
                 
-            } else if ((resPost == true) || (resFile == true)) {
+            } else if ((resPost == true) || (resFile == true)) { //buona riuscita dell'operazione
                 response.sendRedirect(request.getContextPath() + "/SeeGroup?id=" + group_id);
                 
-            } else if ((post_content != null) && (post_content.length() == 0)) {
+            } else if ((post_content != null) && (post_content.length() == 0)) { //errore messaggio vuoto
                 out.println("<h1>Post message can't be void, please retry</h1>");
                 out.println("<form action = 'SeeGroup' method='get' >");
                 out.println("<input type='hidden' value ='" + group_id + "' name='id' >");
                 out.println("<input type='submit' value = 'Retry'/>");
                 out.println("</form>");
                 
-            } else if ((resPost == true) && (resFile == false)) {
+            } else if ((resPost == true) && (resFile == false)) { //errore nell'upload del file
                 out.println("<h1>Error uploading your file, please retry</h1>");
                 out.println("<form action = 'SeeGroup' method='get' >");
                 out.println("<input type='hidden' value ='" + group_id + "' name ='id'>");

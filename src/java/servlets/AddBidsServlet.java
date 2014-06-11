@@ -98,7 +98,6 @@ public class AddBidsServlet extends HttpServlet {
         // devo mandare gli inviti alla persone che non fanno già parte del gruppo o che non hanno già un'invito relativo al gruppo
         PrintWriter out = response.getWriter();
         try {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");

@@ -85,8 +85,6 @@ public class CreateGroupCServlet extends HttpServlet {
         
         PrintWriter out = response.getWriter();
         try {
-            /* TODO output your page here. You may use following sample code. */
-
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -130,7 +128,7 @@ public class CreateGroupCServlet extends HttpServlet {
                 out.println("</form>");
             } else {
                 out.println("<h1>Error: name already used, please try another </h1>"); // unico caso rimanente: nome già presente
-                out.println("<form action = 'CreateGroup' method='post' >"); // tasto riprova ad inserire i dati
+                out.println("<form action = 'CreateGroup' method='post' >"); 
                 out.println("<input type='submit' value = 'Riprova'/>");
                 out.println("</form>");
             }

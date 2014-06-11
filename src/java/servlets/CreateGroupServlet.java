@@ -45,11 +45,11 @@ public class CreateGroupServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user"); // utente collegato
+        User user = (User) session.getAttribute("user"); 
         List<User> users = null;   // lista di tutti gli utenti iscritti al gruppo
 
         try {
-            users = manager.getUsers(user.getUserId()); // ottengo tutti gli utenti invidabili
+            users = manager.getUsers(user.getUserId()); // ottengo tutti gli utenti invitabili
 
         } catch (SQLException ex) {
             Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, ex.toString(), ex);
@@ -59,7 +59,6 @@ public class CreateGroupServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
         try {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -94,7 +93,7 @@ public class CreateGroupServlet extends HttpServlet {
             out.println("<p>Only alphanumeric charactes allowed</p>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<FORM action='CreateGroupC' method ='POST'>"); // chiamo la servlet che va ad operare sul database
+            out.println("<FORM action='CreateGroupC' method ='POST'>"); 
             out.println("Group's name: <input type='text' name='group_name'>");
             out.println("<p> Invite users: </p>");
 
@@ -102,7 +101,7 @@ public class CreateGroupServlet extends HttpServlet {
             if (users != null) {
                 for (int x = 0; x < users.size(); x++) {
                     u = users.get(x);
-                    out.println("<input type='checkbox' name='user' value= " + "'" + u.getUserId() + "'>" + u.getUsername() + "<br>");
+                    out.println("<input type='checkbox' name='user' value= " + "'" + u.getUserId() + "'>" + u.getUsername() + "<br>"); //checkbox per selezionare gli utenti da invitare
                 }
             }
 

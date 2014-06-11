@@ -50,7 +50,7 @@ public class DBManager implements Serializable {
         }
     }
 
-    public User authenticate(String username, String password) throws SQLException {
+    public User authenticate(String username, String password) throws SQLException { //autenticazione dell'utente
 
         PreparedStatement stm = con.prepareStatement("SELECT * FROM UTENTE WHERE username = ? AND password = ?");
         try {
@@ -206,7 +206,7 @@ public class DBManager implements Serializable {
         return users;
     }
 
-    public String getGroupName(int group_id) throws SQLException {
+    public String getGroupName(int group_id) throws SQLException { //ottengo nome del gruppo
         String group_name = null;
         PreparedStatement stm = con.prepareStatement("SELECT nome FROM gruppo WHERE id_gruppo = ?");
         try {
@@ -309,8 +309,8 @@ public class DBManager implements Serializable {
         return p;
     }
 
-    public void sendBids(List<String> user_ids, int group_id, int sender_id) throws SQLException {
-        PreparedStatement stm = con.prepareStatement("INSERT INTO invito (id_utente,id_gruppo,id_invitante) VALUES (?,?,?) "); // mando gli inviti
+    public void sendBids(List<String> user_ids, int group_id, int sender_id) throws SQLException {  // mando gli inviti
+        PreparedStatement stm = con.prepareStatement("INSERT INTO invito (id_utente,id_gruppo,id_invitante) VALUES (?,?,?) ");
         try {
             for (int x = 0; x < user_ids.size(); x++) {
                 stm.setInt(1, Integer.parseInt(user_ids.get(x)));
@@ -323,54 +323,7 @@ public class DBManager implements Serializable {
         }
     }
 
-    public void acceptBids1(String[] bids_ids, int user_id) throws SQLException { // MANCA IL CONTROLLO DEL FATTO CHE SE MODIFICO
-
-        int[] groups_ids = new int[bids_ids.length]; // mi salvo gli id dei gruppi a cui devo aggiungere gli utenti che hanno accettato l'invito
-        PreparedStatement stm = con.prepareStatement("SELECT id_gruppo FROM invito WHERE id_invito = ? AND id_utente = ?"); // 
-        try {
-            for (int x = 0; x < bids_ids.length; x++) {
-                stm.setString(1, bids_ids[x]);
-                stm.setInt(2, user_id);
-                ResultSet rs = stm.executeQuery();
-
-                try {
-                    while (rs.next()) {
-                        groups_ids[x] = rs.getInt("id_gruppo");
-                    }
-                } finally {
-                    rs.close();
-                }
-            }
-        } finally {
-            stm.close();
-        }
-
-        if (groups_ids.length > 0) {
-            PreparedStatement stm1 = con.prepareStatement("INSERT INTO gruppo_utente (id_utente,id_gruppo,amministratore) VALUES (?,?,?)"); // aggiorno le relazioni gruppo-utente in relazione agli inviti accettati
-            try {
-                for (int x = 0; x < groups_ids.length; x++) {
-                    stm1.setInt(1, user_id);
-                    stm1.setInt(2, groups_ids[x]);
-                    stm1.setBoolean(3, false);
-                    stm1.executeUpdate();
-                }
-            } finally {
-                stm1.close();
-            }
-
-            PreparedStatement stm2 = con.prepareStatement("DELETE FROM invito WHERE id_invito = ?"); // elimino gli inviti accettati
-            try {
-                for (int x = 0; x < bids_ids.length; x++) {
-                    stm2.setInt(1, Integer.parseInt(bids_ids[x]));
-                    stm2.executeUpdate();
-                }
-            } finally {
-                stm2.close();
-            }
-        }
-    }
-    
-    public void AcceptBids(List<String> bids, int userId) throws SQLException {
+    public void AcceptBids(List<String> bids, int userId) throws SQLException { //accetta gli inviti
         PreparedStatement stm = con.prepareStatement("INSERT INTO gruppo_utente (id_utente, id_gruppo, amministratore) VALUES (?,?,?)");
         int groupId = 0;
         try {
@@ -399,7 +352,7 @@ public class DBManager implements Serializable {
         }
     }
     
-    public void deleteBids(List<String> bids) throws SQLException {
+    public void deleteBids(List<String> bids) throws SQLException { //elimina gli inviti
         PreparedStatement stm = con.prepareStatement("DELETE FROM invito WHERE id_invito=?");
         try {
             for (int x = 0; x < bids.size(); x++) {
@@ -411,42 +364,7 @@ public class DBManager implements Serializable {
         }
     }
     
-    public void refuseBids1(String[] bids_ids) throws SQLException{
-         PreparedStatement stm = con.prepareStatement("DELETE FROM invito WHERE id_invito = ?"); // elimino gli inviti con ids bids_ids
-            try {
-                for (int x = 0; x < bids_ids.length; x++) {
-                    stm.setInt(1, Integer.parseInt(bids_ids[x]));
-                    stm.executeUpdate();
-                }
-            } finally {
-                stm.close();
-            }
-    }
-    
-    public boolean checkBids1(List<Integer> bids_ids, int user_id) throws SQLException{
-        boolean res = true;
-        for(int x = 0; x < bids_ids.size(); x++){
-            PreparedStatement stm = con.prepareStatement("SELECT id_utente FROM invito WHERE id_invito= ?");
-            try {
-                stm.setInt(1, bids_ids.get(x));
-                ResultSet rs = stm.executeQuery();
-                try {
-                    while(rs.next()){
-                        if(rs.getInt("id_utente") != user_id){
-                            res = false;
-                        }
-                    }
-                } finally {
-                    rs.close();
-                }
-            } finally {
-                stm.close();
-            }
-        }
-        return res;
-    }
-    
-    public boolean checkBids(int userId, int bidId) throws SQLException {
+    public boolean checkBids(int userId, int bidId) throws SQLException { //controlla gli inviti
         PreparedStatement stm = con.prepareStatement("SELECT id_utente FROM invito WHERE id_invito = ? and id_utente = ?");
         int numBids = 0;
         try {
@@ -466,7 +384,7 @@ public class DBManager implements Serializable {
         return numBids == 0;
     }
 
-    public boolean changeGroupName(String name, int group_id) throws SQLException {
+    public boolean changeGroupName(String name, int group_id) throws SQLException { //cambia nome del gruppo
 
         boolean res = false; // variabile booleana che serve ad indicare se l'operazione è andata a buon fine (controllo se il nome esiste gia prima di inserirlo)
         boolean create = false; // variabile che serve per il controllo del nome già presente nel db
@@ -529,10 +447,8 @@ public class DBManager implements Serializable {
     }
 
     public List<Integer> getUsersNotIntoGroup(int group_id) throws SQLException { // ottengo gli utenti che non fanno parte del gruppo con id = group_id
-        // int[] users = new int[100];
         List<Integer> users = new ArrayList();
         PreparedStatement stm = con.prepareStatement("SELECT DISTINCT  id_utente FROM utente WHERE id_utente NOT IN (SELECT DISTINCT id_utente FROM gruppo_utente WHERE id_gruppo = ?) ");
-        //PreparedStatement stm = con.prepareStatement("SELECT DISTINCT  id_utente FROM gruppo_utente WHERE id_utente NOT IN (SELECT DISTINCT id_utente FROM gruppo_utente WHERE id_gruppo = ?) ");
         try {
             stm.setInt(1, group_id);
             ResultSet rs = stm.executeQuery();
@@ -599,7 +515,7 @@ public class DBManager implements Serializable {
         return users;
     }
 
-    public int getGroupOwner(int group_id) throws SQLException { // ottengo l'ide del proprietario del gruppo con id = group_id
+    public int getGroupOwner(int group_id) throws SQLException { // ottengo l'id del proprietario del gruppo con id = group_id
         int owner = 0;
         PreparedStatement stm = con.prepareStatement("SELECT id_proprietario FROM gruppo WHERE id_gruppo = ? ");
         try {

@@ -67,7 +67,7 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("user", user);
              response.sendRedirect(request.getContextPath() + "/Home");// dirigo verso la home page
         } else {
-            response.sendRedirect(request.getContextPath() + "/?login=failure");// dirigo verso la home page
+            response.sendRedirect(request.getContextPath() + "/?login=failure");// dirigo verso la first page con errore
         }
         
     }

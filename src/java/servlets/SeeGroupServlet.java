@@ -51,7 +51,7 @@ public class SeeGroupServlet extends HttpServlet {
         User user = (User) session.getAttribute("user");
         int group_id = Integer.parseInt(request.getParameter("id")); // id del gruppo
         List<Post> posts = new ArrayList(); // lista per i post
-        PostFile pf = null; // oggetto di tipo pf usato per l'eventuale link al file caricato in un post
+        PostFile pf = null; // oggetto di tipo postfile usato per l'eventuale link al file caricato in un post
         String fileLink = null; // link al file caricato in un post
 
         posts = manager.getPosts(group_id);
@@ -59,7 +59,6 @@ public class SeeGroupServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");

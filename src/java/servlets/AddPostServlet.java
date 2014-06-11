@@ -9,7 +9,6 @@ import db.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +18,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Alessandro
  */
-@WebServlet(name = "AddPost", urlPatterns = {"/AddPost"})
+
 public class AddPostServlet extends HttpServlet {
 
     /**
@@ -40,7 +39,6 @@ public class AddPostServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
         try {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -75,9 +73,8 @@ public class AddPostServlet extends HttpServlet {
             
             out.println("<p> If you want to add link, please embrace it using $$ link ...$$LINK$$..." );
             out.println("<p> Maximum size of the file: 10 MB! </p>");
-            out.println("<FORM action = 'AddPostC?id=" +  group_id + "' method = 'POST' enctype='multipart/form-data'>"); // passo il parametro id nella get perchè cioè multipart
+            out.println("<FORM action = 'AddPostC?id=" +  group_id + "' method = 'POST' enctype='multipart/form-data'>"); // richiesta multipart con parametro id in get
             out.println("<textarea name='post_content' placeholder='Write your post here'></textarea><br>");
-            //out.println("<input type='hidden' value = '" +""+ + "' name='id' >"); // converto group_id in una stringa cosi integer.parseInt(id) del filtro e della servlet AddPostC non danno errore
             out.println("<input type='file' name='file' size='50' />"); // upload del file
             out.println("<input type='submit' value='Create'>");    
             out.println("</FORM>");
