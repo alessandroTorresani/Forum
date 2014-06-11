@@ -85,7 +85,7 @@ public class SeeGroupServlet extends HttpServlet {
             out.println("</div>");
 
             out.println("<div class='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>");
-            out.println("<ul class='nav navbar-nav navbar-left'>\n<li><a href='AddPost?id=" + group_id + "'><span class='glyphicon glyphicon-comment'></span><b> Add post</b></a></li></ul>");
+            out.println("<ul class='nav navbar-nav navbar-left'><li><a href='AddPost?id=" + group_id + "'><span class='glyphicon glyphicon-comment'></span><b> Add post</b></a></li></ul>");
             out.println("<ul class='nav navbar-nav navbar-right'><li><a><span class='glyphicon glyphicon-user'></span> " + user.getUsername() + "</a></li></ul>");
             out.println("</div>");
             out.println("</div></nav>");

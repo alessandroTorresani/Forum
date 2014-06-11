@@ -98,7 +98,7 @@ public class ChangeNameCServlet extends HttpServlet {
 
             out.println("<div style='width:80%; margin:0 auto;'>");
             if (res == true) {
-                out.println("<h1>Group' name changed succesfully </h1>");
+                out.println("<h1>Group name changed succesfully </h1>");
                 out.println("<form action = 'Home' method='post' >"); // tasto torna alla home
                 out.println("<input type='submit' value = 'Torna alla Home'/>");
                 out.println("</form>");
