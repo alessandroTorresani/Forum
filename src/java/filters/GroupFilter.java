@@ -60,9 +60,6 @@ public class GroupFilter implements Filter {
             } catch (SQLException ex) {
                 Logger.getLogger(GroupFilter.class.getName()).log(Level.SEVERE, null, ex);
             }
-            for (int x = 0; x < users.size(); x++) { // debug
-                System.out.println(" id ammessi= " + users.get(x));
-            }
         }
 
         if ((id_group > 0) && (users.contains(user.getUserId()))) { // se l'utente è loggato e il suo id è tra quelli ammessi

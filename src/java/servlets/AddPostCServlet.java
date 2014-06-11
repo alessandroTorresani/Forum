@@ -76,7 +76,7 @@ public class AddPostCServlet extends HttpServlet {
         } catch (Exception ex) {
             System.out.println(ex.toString());
         }
-        System.out.println(multi);
+        
         if (multi != null) {
             post_content = multi.getParameter("post_content"); // ottengo il contenuto del post da multi
             if ((post_content != null) && (post_content.length() > 0)) {
@@ -94,7 +94,6 @@ public class AddPostCServlet extends HttpServlet {
                         String name = ((String) files.nextElement());
 
                         f = multi.getFile(name);
-                        System.out.println("file name: " + f);
                         if (f != null) { // se il file esiste allora adesso devo aggiornare la tabella POST-FILE
                             resFile = manager.addFileToPost(f.getName(), post_id, group_id, user.getUserId());
                         }
@@ -103,10 +102,8 @@ public class AddPostCServlet extends HttpServlet {
                     Enumeration files = multi.getFileNames(); //if something in the post creation went wrong, and was uploaded a file -> delete the file
                     while (files.hasMoreElements()) {
                         String name = ((String) files.nextElement());
-                        System.out.println("name:" + name);
                         f = multi.getFile(name);
                         if (f != null) {
-                            System.out.println("entrato nell'if del delete");
                             f.delete();
                         }
                     }
@@ -115,10 +112,8 @@ public class AddPostCServlet extends HttpServlet {
                 Enumeration files = multi.getFileNames(); //if the post content was empty, delete the uploaded file if there is
                 while (files.hasMoreElements()) {
                     String name = ((String) files.nextElement());
-                    System.out.println("name:" + name);
                     f = multi.getFile(name);
                     if (f != null) {
-                        System.out.println("entrato nell'if del delete");
                         f.delete();
                     }
                 }

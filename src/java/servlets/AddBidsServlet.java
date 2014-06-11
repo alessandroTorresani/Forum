@@ -61,9 +61,6 @@ public class AddBidsServlet extends HttpServlet {
             throw new ServletException(ex);
         }
 
-        for (int x = 0; x < first_filter.size(); x++) {
-            System.out.println("first= " + first_filter.get(x));
-        }
         try {
             second_filter = manager.getUserNotInvited(group_id); // ottengo gli id degli utenti che non fanno gia parte di questo gruppo
 
@@ -72,14 +69,9 @@ public class AddBidsServlet extends HttpServlet {
             throw new ServletException(ex);
         }
 
-        for (int x = 0; x < second_filter.size(); x++) {
-            System.out.println("second= " + second_filter.get(x));
-        }
-
         if ((second_filter.size() == 0) && (first_filter.size() > 0)) { // se il secondo filtro non ha dato risultati e il primo non è vuoto allora il primo sarà il definiivo
             for (int x = 0; x < first_filter.size(); x++) {
                 users_ids.add("" + first_filter.get(x));
-
             }
 
         } else if ((second_filter.size() > 0) && (first_filter.size() > 0)) { // devo togliere gli utenti che hanno già un invito in attesa
@@ -89,14 +81,10 @@ public class AddBidsServlet extends HttpServlet {
                 }
             }
             for (int x = 0; x < first_filter.size(); x++) {
-                //  System.out.println("First after: " + first_filter.get(x));
-                users_ids.add("" + first_filter.get(x));
+               users_ids.add("" + first_filter.get(x));
             }
         }
 
-        for (int x = 0; x < users_ids.size(); x++) {
-            System.out.println("user= " + users_ids.get(x));
-        }
         // adesso che ho gli id delle persone che posso invitare devo recuperare tali utenti per poterli stampare
         List<User> users = null;
         try {

@@ -345,11 +345,6 @@ public class DBManager implements Serializable {
             stm.close();
         }
 
-        System.out.println("user id = " + user_id);
-        for (int x = 0; x < groups_ids.length; x++) {
-            System.out.println("group id = " + groups_ids[x]);
-        }
-
         if (groups_ids.length > 0) {
             PreparedStatement stm1 = con.prepareStatement("INSERT INTO gruppo_utente (id_utente,id_gruppo,amministratore) VALUES (?,?,?)"); // aggiorno le relazioni gruppo-utente in relazione agli inviti accettati
             try {
@@ -692,7 +687,6 @@ public class DBManager implements Serializable {
 
     public boolean addFileToPost(String file_name, int post_id, int group_id, int user_id) throws SQLException { // funzione che serve per collegare ad ogni post un file caricato (se presente)
         boolean res = false;
-        System.out.println("funzione addFile");
         PreparedStatement stm = con.prepareStatement("INSERT INTO post_file (file_path, id_scrivente, id_gruppo, id_post) VALUES (?,?,?,?) ");
         try {
         stm.setString(1, file_name);

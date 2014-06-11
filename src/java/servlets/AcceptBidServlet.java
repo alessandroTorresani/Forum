@@ -59,7 +59,6 @@ public class AcceptBidServlet extends HttpServlet {
             accBids = new ArrayList(acceptedBids.length);
             for (int x = 0; x < acceptedBids.length; x++) {
                 accBids.add(acceptedBids[x]);
-                System.out.println("accbid:: " + accBids.get(x));
             }
         }
 
@@ -93,9 +92,7 @@ public class AcceptBidServlet extends HttpServlet {
         if (accBids != null) { //check,accept and remove accepted bids
 
             for (int x = 0; x < accBids.size(); x++) {
-                System.out.println("accbid:: " + accBids.get(x));
                 if (manager.checkBids(user.getUserId(), Integer.parseInt(accBids.get(x))) == true) { //check if those bids are present and are referred to this user
-                    System.out.println("removed: " + accBids.get(x));
                     accBids.remove(x);
                     accError = true;
                 }
@@ -118,7 +115,6 @@ public class AcceptBidServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
 
-      // System.out.println(accBids.size() + " " + refBids.size());
         try {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");

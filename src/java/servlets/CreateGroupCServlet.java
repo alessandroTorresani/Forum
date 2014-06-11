@@ -82,14 +82,7 @@ public class CreateGroupCServlet extends HttpServlet {
         if ((checkbox_params != null) && (group_id != 0)) { // mando gli inviti se l'utente ha selezionato degli utenti e la creazione del gruppo è andata a buon fine
             manager.sendBids(checkbox_bids, group_id, user.getUserId());
         }
-        /* if (checkbox_params != null) {
-         for (int x = 0; x < checkbox_params.length; x++) {
-         System.out.println("paramas= " + checkbox_params[x]);
-         }
-         }*/
-
-        System.out.println(group_name + " " + MyUtility.MyUtility.checkHtml(group_name));// + " " + group_name.length());
-
+        
         PrintWriter out = response.getWriter();
         try {
             /* TODO output your page here. You may use following sample code. */
