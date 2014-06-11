@@ -64,21 +64,21 @@ public class FirstServlet extends HttpServlet {
             out.println("</div></nav>");
 
             out.println("<div style='width:80%; margin:0 auto;'>");
-            out.println("<div id='header' style='margin:20px';>" // header
-                    + "<h1>Forum - Login</h1>"
-                    + "</div>");
-
+            out.println("<h1>Forum - Login</h1>");
+            out.println("<br>");
             if ((loginResult != null) && (loginResult.equals("failure"))) {
-                out.println("<p> Login errato </p>"); 
+                out.println("<p> Login errato </p>");
             }
 
-            out.println("<div id='form_id'  style='margin: 20px';>"); // form login
-            out.println("<FORM action='Login' method ='POST'>");
-            out.println("Username: <input type='text' name='username'> <br />");
-            out.println("Password:  <input type='password' name='password'> <br />");
-            out.println("<INPUT type='submit' value='Login'>");
-            out.println("</FORM>");
-            
+            //form login
+            out.println("<form class='navbar-form navbar-left' role='form' action='Login' method='post'>");
+            out.println("<div class='form-group'>");
+            out.println("<input type='text' class='form-control' id='email' placeholder='Username' name='username'>");
+            out.println("<input type='password' class='form-control' id='password' placeholder='Password' name='password'>");
+            out.println("</div>");
+            out.println(" <button type='submit' class='btn btn-default'>Login</button");
+            out.println("</form>");
+
             out.println("</div>");
             out.println("</body>");
             out.println("</html>");

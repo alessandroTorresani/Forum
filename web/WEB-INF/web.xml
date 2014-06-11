@@ -112,6 +112,10 @@
         <servlet-class>servlets.SeeGroupServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>AddPost</servlet-name>
+        <servlet-class>servlets.AddPostServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>AddPostC</servlet-name>
         <servlet-class>servlets.AddPostCServlet</servlet-class>
     </servlet>
@@ -166,6 +170,10 @@
     <servlet-mapping>
         <servlet-name>SeeGroup</servlet-name>
         <url-pattern>/SeeGroup</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddPost</servlet-name>
+        <url-pattern>/AddPost</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AddPostC</servlet-name>
